@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'sweep-ledger-mobile',
+  appId: 'com.pau.sweep_ledger',
+  appName: 'Sweep Ledger',
   webDir: 'www'
 };
 

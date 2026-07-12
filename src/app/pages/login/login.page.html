@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true">
+  <ion-text color="primary">
+    <h1>Login to Glyph Ledger</h1>
+  </ion-text>
+
+  <div style="padding: 10px;">
+    <form id="login-form" (ngSubmit)="onLogin()">
+      <ion-input
+        label="Username"
+        labelPlacement="floating"
+        type="text"
+        name="username"
+        [(ngModel)]="username">
+      </ion-input>
+      <ion-input
+        label="Password"
+        labelPlacement="floating"
+        type="password"
+        name="password"
+        [(ngModel)]="password">
+      </ion-input>
+      @if (authStore.authError()) {
+        <ion-text color="danger">
+          <p class="error-text">{{ authStore.authError() }}</p>
+        </ion-text>
+      }
+      <div class="login-actions">
+        <ion-button type="submit" [disabled]="loading()">
+          @if (loading())
+          {
+            <ion-spinner name="circular" style="margin-right: 5px;"></ion-spinner>
+            <ion-text>Logging in...</ion-text>
+          }
+          @else { Login }
+        </ion-button>
+        @if(authStore.biometricDeclined())
+        {
+          <ion-button type="button" class="biometric-btn" (click)="onBiometricRetry()">
+            <ion-icon name="finger-print-outline"></ion-icon>
+          </ion-button>
+        }
+      </div>
+    </form>
+  </div>
+</ion-content>

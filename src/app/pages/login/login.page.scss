@@ -1,0 +1,60 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+ion-input {
+  --background: var(--ion-background-color-step-100);
+  --color: var(--ion-text-color);
+  --border-radius: 10px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+}
+
+.error-text {
+  font-size: 0.85rem;
+  margin: 4px 0 0;
+  text-align: center;
+}
+
+.register-link {
+  display: flex;
+  justify-content: center;   // centers the button horizontally
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: stretch;
+}
+
+.login-actions ion-button {
+  height: 44px;     // explicit, matching height for both
+  margin-top: 0;
+}
+
+.login-actions ion-button[type="submit"] {
+  flex: 1;          // login button grows to fill available width
+  margin-top: 0;    // override the old margin-top: 8px (now on the row)
+}
+
+.biometric-btn {
+  flex: 0 0 auto;   // don't grow, don't shrink — just fit the icon
+}

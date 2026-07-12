@@ -4,11 +4,17 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authTokenInterceptor } from './app/interceptors/auth-token-interceptor';
+import { refreshInterceptor } from './app/interceptors/refresh-interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideHttpClient(
+      withInterceptors([authTokenInterceptor, refreshInterceptor])
+    )
   ],
 });

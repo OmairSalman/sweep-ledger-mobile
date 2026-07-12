@@ -35,3 +35,28 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+.app-toast-success {
+  --background: var(--ion-color-success);
+  --color: var(--ion-color-success-contrast);
+}
+
+.app-toast-error {
+  --background: var(--ion-color-danger);
+  --color: var(--ion-color-danger-contrast);
+}
+
+.alert-danger-btn.alert-button {
+  color: var(--ion-color-danger) !important;
+}
+
+body.scanner-active {
+  visibility: hidden;
+  --background: transparent;
+  --ion-background-color: transparent;
+  background: transparent;
+}
+
+body.scanner-active .scanner-ui {
+  visibility: visible;
+}
