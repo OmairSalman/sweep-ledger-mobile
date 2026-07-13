@@ -1,0 +1,58 @@
+<ion-content [fullscreen]="true">
+
+  @if (scanning()) {
+    <!-- Everything here shows OVER the camera feed -->
+    <div class="scanner-ui">
+
+      <!-- Top bar: count + last scanned -->
+      <div class="scan-status">
+        <div class="scan-count">
+          {{ assetsStore.assets().length }} scanned
+        </div>
+
+        @if (lastScanned()) {
+          <div class="last-scanned">
+            {{ lastScanned() }}
+          </div>
+        }
+      </div>
+
+      <!-- The reticle -->
+      <div class="reticle"></div>
+
+      <!-- Warning area: duplicate (amber) or error (red) -->
+      @if (warning()) {
+        <div class="warning" [class.warning-duplicate]="warningType() === 'duplicate'"
+                             [class.warning-error]="warningType() === 'error'">
+          {{ warning() }}
+        </div>
+      }
+
+      <!-- Done -->
+      <ion-button class="done-button" (click)="done()" color="light" expand="block">
+        Done
+      </ion-button>
+
+    </div>
+  }
+
+  @else if (permissionDenied()) {
+    <div class="center-state">
+      <ion-icon name="camera-outline" class="big-icon"></ion-icon>
+      <ion-text>
+        <h2>Camera permission needed</h2>
+        <p>Sweep Ledger needs camera access to scan barcodes.</p>
+      </ion-text>
+      <ion-button (click)="startScanning()">Try again</ion-button>
+      <ion-button fill="clear" (click)="done()">Back to sweep</ion-button>
+    </div>
+  }
+
+  @else {
+    <!-- Scanner not running and not a permission problem — transient/error fallback -->
+    <div class="center-state">
+      <ion-spinner name="circular"></ion-spinner>
+    </div>
+  }
+
+</ion-content>

@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      My sweeps
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if(loading()){<ion-spinner name="circular"></ion-spinner>}
+
+  @if(errorMsg())
+  {
+    <div class="error-state">
+      <ion-text color="danger">{{ errorMsg() }}</ion-text>
+    </div>
+  }
+
+  @if(!loading() && !errorMsg())
+  {
+    @if(sweepsStore.sweeps().length === 0)
+    {
+      <div class="empty-state">
+        <ion-label><h1>No sweeps yet</h1></ion-label>
+        <ion-text><h2>Tap + to start one</h2></ion-text>
+      </div>
+    }
+    @else
+    {
+      <ion-list>
+        @for(sweep of sweepsStore.sweeps(); track sweep.id)
+        {
+          <ion-item-sliding>
+            <ion-item [routerLink]="['/tabs/sweeps', sweep.id]" button detail>
+              <ion-label>
+                <h2>{{ sweep.roomCode }}</h2>
+                <p>{{ sweep.responsiblePersonName}}</p>
+                <p>{{ sweep.createdAt | date:'medium' }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="confirmDelete(sweep)">
+                Delete
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        }
+      </ion-list>
+    }
+  }
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openCreateSweep()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

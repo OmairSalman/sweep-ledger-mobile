@@ -48,7 +48,7 @@ export class LoginPage implements ViewWillEnter {
     this.authStore.login(this.username, this.password).subscribe({
       next:() =>
       {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/tabs']);
         this.username = '';
         this.password = '';
         this.loading.set(false);

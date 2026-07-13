@@ -1,0 +1,62 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: var(--ion-background-color-step-100);
+  --border-radius: 10px;
+  margin-bottom: 10px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+
+  h2 {
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+// spinner sits centered in the page while loading
+ion-spinner {
+  display: block;
+  margin: 40% auto 0;
+  width: 36px;
+  height: 36px;
+}
+
+// error message: centered, red, set apart
+.error-state {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: 40%;
+  color: var(--ion-color-danger);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 70%;
+  gap: 8px;
+}
+
+ion-item-option {
+  font-weight: 600;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}

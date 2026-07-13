@@ -14,8 +14,8 @@ export class Biometrics {
   async authenticate(): Promise<void>
   {
     return BiometricAuth.authenticate({
-      androidTitle: 'Glyph Ledger',
-      androidSubtitle: 'Unlock to access your scans',
+      androidTitle: 'Sweep Ledger',
+      androidSubtitle: 'Unlock to access the app',
       cancelTitle: 'Cancel',
       allowDeviceCredential: false,
     });

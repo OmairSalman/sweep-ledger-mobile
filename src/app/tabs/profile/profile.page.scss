@@ -1,0 +1,69 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+ion-list {
+  background: transparent;
+  margin-bottom: 24px;       // space between the two sections
+}
+
+.info-list {
+  ion-item {
+    --background: transparent;
+    --border-radius: 0;
+    --padding-start: 4px;
+    --inner-padding-end: 4px;
+    margin-bottom: 0;
+    --border-color: var(--ion-background-color-step-150);
+    // keep Ionic's default bottom divider instead of card styling
+  }
+
+  ion-label {
+    color: var(--ion-color-medium);   // muted "field name" look
+    font-size: 0.95rem;
+  }
+
+  ion-note {
+    color: var(--ion-text-color);     // the actual value, full-strength
+    font-size: 1rem;
+  }
+}
+
+ion-list-header {
+  ion-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+  }
+}
+
+ion-item {
+  --background: var(--ion-background-color-step-100);
+  --color: var(--ion-text-color);
+  --border-radius: 10px;
+  margin-bottom: 10px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+}
+
+form {
+  ion-button {
+    margin-top: 16px;
+    height: 20px;
+  }
+}
+
+// the destructive logout, set apart from the form above
+ion-content > ion-button[color="danger"] {
+  margin-top: 32px;
+  height: 20px;
+}
+
+.error-text {
+  font-size: 0.85rem;
+  margin: 4px 0 0;
+  text-align: center;
+}

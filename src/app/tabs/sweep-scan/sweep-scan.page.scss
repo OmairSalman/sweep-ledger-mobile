@@ -1,0 +1,129 @@
+// ============================================
+// The scanner-active body class (global)
+// Put this in global.scss, not the page's scss
+// ============================================
+// body.scanner-active {
+//   visibility: hidden;
+//   --background: transparent;
+//   --ion-background-color: transparent;
+//   background: transparent;
+// }
+// body.scanner-active .scanner-ui {
+//   visibility: visible;
+// }
+// ^ You already have this from Glyph Ledger — leave it as is.
+
+
+// ============================================
+// The overlay
+// ============================================
+.scanner-ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 24px;
+}
+
+// --- Top: count + last scanned ---
+.scan-status {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 16px);   // clear the notch
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scan-count {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 999px;          // pill
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.last-scanned {
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-family: monospace;         // barcodes read better in mono
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// --- Center: the reticle ---
+.reticle {
+  width: 300px;
+  height: 160px;                  // wide rectangle — barcodes are wide
+  max-width: 85%;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);   // dims everything outside the box
+}
+
+// --- Warning area (below the reticle) ---
+.warning {
+  position: absolute;
+  bottom: 140px;                  // above the Done button
+  left: 24px;
+  right: 24px;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  animation: warning-in 150ms ease-out;
+}
+
+.warning-duplicate {
+  background: rgba(255, 149, 0, 0.95);    // amber
+}
+
+.warning-error {
+  background: rgba(235, 68, 90, 0.95);    // red
+}
+
+@keyframes warning-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// --- Bottom: Done ---
+.done-button {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 24px);
+  left: 24px;
+  right: 24px;
+}
+
+
+// ============================================
+// Non-scanning states (app UI visible, normal page)
+// ============================================
+.center-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 80%;
+  gap: 16px;
+  padding: 24px;
+}
+
+.big-icon {
+  font-size: 64px;
+  color: var(--ion-color-medium);
+}

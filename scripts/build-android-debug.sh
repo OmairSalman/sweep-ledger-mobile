@@ -9,7 +9,7 @@ mkdir -p "$OUTDIR"
 
 # Compute build number for today
 N=1
-while ls "$OUTDIR/glyph-ledger_debug_${DATE}_build-${N}_"*"_UTC.apk" 2>/dev/null | grep -q .; do
+while ls "$OUTDIR/sweep-ledger_debug_${DATE}_build-${N}_"*"_UTC.apk" 2>/dev/null | grep -q .; do
   N=$((N + 1))
 done
 
@@ -22,7 +22,7 @@ fi
 ionic capacitor sync android
 cd android && ./gradlew assembleDebug && cd ..
 
-DEST="$OUTDIR/glyph-ledger_debug_${DATE}_build-${N}_${TIME}_UTC.apk"
+DEST="$OUTDIR/sweep-ledger_debug_${DATE}_build-${N}_${TIME}_UTC.apk"
 cp ./android/app/build/outputs/apk/debug/app-debug.apk "$DEST"
 
 echo "APK saved to $DEST"

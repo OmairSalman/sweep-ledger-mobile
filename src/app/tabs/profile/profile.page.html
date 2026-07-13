@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Profile
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list class="info-list">
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <ion-note slot="end">{{ authStore.currentUser()?.name }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Username</ion-label>
+      <ion-note slot="end">{{ authStore.currentUser()?.username }}</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+  <ion-list-header>
+    <ion-label>Change password</ion-label>
+  </ion-list-header>
+
+  <form (ngSubmit)="onChangePassword()">
+    <ion-item>
+      <ion-input label="Current password" labelPlacement="floating" type="password" name="currentPassword" [(ngModel)]="currentPassword"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="New password" labelPlacement="floating" type="password" name="newPassword" [(ngModel)]="newPassword"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Confirm password" labelPlacement="floating" type="password" name="confirmPassword" [(ngModel)]="confirmPassword"></ion-input>
+    </ion-item>
+    @if (authStore.authError()) {
+      <ion-text color="danger">
+        <p class="error-text">{{ authStore.authError() }}</p>
+      </ion-text>
+    }
+    <ion-button type="submit" expand="block" [disabled]="changing()">
+      @if(changing()){
+        <ion-spinner name="circular" style="margin-right: 5px;"></ion-spinner>
+        <ion-text>Changing password...</ion-text>
+      }
+      @else {Change password}
+    </ion-button>
+  </form>
+</ion-list>
+@if (authStore.currentUser()?.role === 'Admin') {
+  <ion-button expand="block" routerLink="/admin">Admin Panel</ion-button>
+}
+<ion-button expand="block" color="danger" (click)="onLogout()">Log out</ion-button>
+</ion-content>

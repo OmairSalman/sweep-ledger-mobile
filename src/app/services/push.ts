@@ -35,13 +35,14 @@ export class Push {
     const status = await PushNotifications.requestPermissions();
     if (status.receive !== 'granted') return;
 
-    await PushNotifications.register();
+    // TODO: re-enable once Firebase is configured for com.pau.sweep_ledger
+    /*await PushNotifications.register();
     await PushNotifications.createChannel({
       id: 'high_importance',
       name: 'Important Notifications',
       importance: 5,
       visibility: 1,
       vibration: true
-    });
+    });*/
   }
 }
