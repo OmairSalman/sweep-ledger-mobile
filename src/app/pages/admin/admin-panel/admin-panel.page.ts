@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonIcon, IonItem, IonList, IonBackButton, IonButtons, ModalController, ToastController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { peopleOutline, personAddOutline } from 'ionicons/icons';
+import { peopleOutline, personAddOutline, notificationsOutline } from 'ionicons/icons';
 import { RouterLink } from '@angular/router';
 import { CreateUserPage } from '../../create-user/create-user.page';
+import { NotificationFormPage } from '../../notification-form/notification-form.page';
 
 @Component({
   selector: 'app-admin-panel',
@@ -19,7 +20,7 @@ export class AdminPanelPage {
   private toastController = inject(ToastController);
   
   constructor() {
-    addIcons({ peopleOutline, personAddOutline });
+    addIcons({peopleOutline,personAddOutline,notificationsOutline});
   }
 
   private async showToast(message: string, css: string)
@@ -43,6 +44,22 @@ export class AdminPanelPage {
     if(role === 'confirm' && data)
     {
       this.showToast(`${data.name} created successfully`, 'app-toast-success')
+    }
+  }
+
+  async openCreateNotification()
+  {
+    const modal = await this.modalController.create({
+      component: NotificationFormPage
+    })
+    await modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if(role === 'confirm' && data)
+    {
+      const message = data.sentCount == 0 ? "No devices reached"
+      : `Sent to ${data.sentCount}${data.failedCount > 0 ? `, ${data.failedCount} failed` : ''}`;
+      const css = data.sentCount > 0 ? 'app-toast-success' : 'app-toast-error';
+      this.showToast(message, css);
     }
   }
 }

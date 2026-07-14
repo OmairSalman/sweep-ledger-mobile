@@ -36,5 +36,9 @@ export const routes: Routes = [
   {
     path: 'create-user',
     loadComponent: () => import('./pages/create-user/create-user.page').then( m => m.CreateUserPage)
+  },
+  {
+    path: 'notification-form',
+    loadComponent: () => import('./pages/notification-form/notification-form.page').then( m => m.NotificationFormPage)
   }
 ];

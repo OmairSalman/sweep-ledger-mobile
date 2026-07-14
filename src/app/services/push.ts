@@ -3,6 +3,13 @@ import { PushNotifications } from '@capacitor/push-notifications';
 import { Device } from '@capacitor/device';
 import { Api } from './api';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+
+interface NotificationBroadcastResponse
+{
+  sentCount: number,
+  failedCount: number
+}
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +50,10 @@ export class Push {
       visibility: 1,
       vibration: true
     });
+  }
+
+  broadcastNotification(title: string, body: string): Observable<NotificationBroadcastResponse>
+  {
+    return this.api.post<NotificationBroadcastResponse>('/notifications/broadcast', { title, body });
   }
 }
