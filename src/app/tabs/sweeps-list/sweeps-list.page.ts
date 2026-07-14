@@ -70,7 +70,7 @@ export class SweepsListPage implements ViewWillEnter {
   {
     const alert = await this.alertController.create({
       header: 'Delete sweep?',
-      message: 'This cannot be undone.',
+      message: "This cannot be undone. All of the assets scanned in this sweep will also be deleted.",
       buttons: [
         { text: 'Cancel', role: 'cancel' },
         { text: 'Delete', role: 'destructive', cssClass: 'alert-danger-btn', handler: () => this.doDelete(sweep.id) },
@@ -81,9 +81,9 @@ export class SweepsListPage implements ViewWillEnter {
 
   doDelete(sweepId: number)
   {
-    /*this.sweepsStore.deleteScan(sweepId).subscribe({
-      next:() => this.showToast('Scan deleted successfully', 'app-toast-success'),
-      error:(err) => this.showToast(err.error ?? 'Could not delete scan', 'app-toast-error')
-    })*/
+    this.sweepsStore.deleteSweep(sweepId).subscribe({
+      next:() => this.showToast('Sweep deleted', 'app-toast-success'),
+      error:(err) => this.showToast(err.error ?? 'Could not delete sweep', 'app-toast-error')
+    })
   }
 }

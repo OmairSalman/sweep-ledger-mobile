@@ -45,4 +45,11 @@ export class SweepsStore {
       tap((sweep) => this.sweeps.update(sweeps => [sweep, ...sweeps]))
     )
   }
+
+  deleteSweep(sweepId: number): Observable<void>
+  {
+    return this.api.delete<void>(`/sweeps/${sweepId}`).pipe(
+      tap(() => this.sweeps.update(sweeps => sweeps.filter(sweep => sweep.id !== sweepId)))
+    )
+  }
 }

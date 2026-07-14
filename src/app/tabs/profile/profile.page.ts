@@ -51,6 +51,13 @@ export class ProfilePage implements ViewWillEnter {
       return;
     }
 
+    if (this.newPassword.length < 8)
+    {
+      this.authStore.authError.set('New password must be at least 8 characters long');
+      this.changing.set(false);
+      return;
+    }
+
     if(this.newPassword !== this.confirmPassword)
     {
       this.authStore.authError.set(`New password and confirm password don't match`);
@@ -69,7 +76,7 @@ export class ProfilePage implements ViewWillEnter {
       },
       error: (err: HttpErrorResponse) =>
       {
-        this.authStore.authError.set(err.error);
+        this.authStore.authError.set(err.error || err.message);
         this.changing.set(false);
       }
     })

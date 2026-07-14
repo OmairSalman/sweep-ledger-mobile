@@ -31,4 +31,11 @@ export class AssetsStore {
       })
     )
   }
+
+  deleteAsset(sweepId: number, assetId: number): Observable<void>
+  {
+    return this.api.delete<void>(`/sweeps/${sweepId}/assets/${assetId}`).pipe(
+      tap(() => this.assets.update(assets => assets.filter(a => a.id !== assetId)))
+    );
+  }
 }

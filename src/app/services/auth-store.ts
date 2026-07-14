@@ -74,12 +74,16 @@ export class AuthStore {
   changePassword(currentPassword: string, newPassword: string): Observable<void>
   {
     this.authError.set('');
-    return this.api.put<{ accessToken: string, refreshToken: string }>('/auth/change-password', { currentPassword, newPassword }).pipe(
-      tap((response) =>
-      {
-        this.tokenStorage.setAccessToken(response.accessToken);
-      }),
-      switchMap((response) => from(this.tokenStorage.setRefreshToken(response.refreshToken)))
+    return from(Device.getId()).pipe(
+      switchMap((deviceId) => {
+        return this.api.put<{ accessToken: string, refreshToken: string }>('/auth/change-password', { currentPassword, newPassword, deviceId: deviceId.identifier }).pipe(
+          tap((response) =>
+          {
+            this.tokenStorage.setAccessToken(response.accessToken);
+          }),
+          switchMap((response) => from(this.tokenStorage.setRefreshToken(response.refreshToken)))
+        )
+      })
     )
   }
 

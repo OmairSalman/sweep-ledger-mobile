@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonBackButton, IonButtons, IonSpinner, IonText, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonIcon, IonItem, IonLabel, IonListHeader, IonFabButton, IonFab } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonBackButton, IonButtons, IonSpinner, IonText, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonIcon, IonItem, IonLabel, IonListHeader, IonFabButton, IonFab, IonItemSliding, IonItemOption, IonItemOptions, AlertController, ToastController } from '@ionic/angular/standalone';
 import { inject } from '@angular/core';
 import { SweepsStore } from 'src/app/services/sweeps-store';
 import { AssetsStore } from 'src/app/services/assets-store';
@@ -10,18 +10,21 @@ import { Sweep } from 'src/models/sweep';
 import { forkJoin } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { personOutline, calendarOutline, cubeOutline, scanOutline, barcodeOutline } from 'ionicons/icons';
+import { Asset } from 'src/models/asset';
 
 @Component({
   selector: 'app-sweep-detail',
   templateUrl: './sweep-detail.page.html',
   styleUrls: ['./sweep-detail.page.scss'],
   standalone: true,
-  imports: [IonFab, IonFabButton, IonListHeader, IonLabel, IonItem, IonIcon, IonCardTitle, IonCardSubtitle, IonCardHeader, IonCard, IonText, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner, IonCardContent, IonList]
+  imports: [IonItemOptions, IonItemOption, IonFab, IonFabButton, IonListHeader, IonLabel, IonItem, IonIcon, IonCardTitle, IonCardSubtitle, IonCardHeader, IonCard, IonText, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner, IonCardContent, IonList, IonItemSliding]
 })
 export class SweepDetailPage implements ViewWillEnter {
   private sweepsStore = inject(SweepsStore);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private alertController = inject(AlertController);
+  private toastController = inject(ToastController);
   assetsStore = inject(AssetsStore);
   sweepId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -55,8 +58,40 @@ export class SweepDetailPage implements ViewWillEnter {
     })
   }
 
+  private async showToast(message: string, css: string)
+  {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      cssClass: css,
+    });
+    await toast.present();
+  }
+
   continueScanning()
   {
     this.router.navigate(['/tabs/sweeps', this.sweepId, 'scan']);
+  }
+
+  async confirmDelete(asset: Asset)
+  {
+    const alert = await this.alertController.create({
+      header: 'Delete asset?',
+      message: `Remove ${asset.barcodeValue} from this sweep? This cannot be undone.`,
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'Delete', role: 'destructive', cssClass: 'alert-danger-btn', handler: () => this.doDelete(asset.id) },
+      ],
+    });
+    await alert.present();
+  }
+
+  doDelete(assetId: number)
+  {
+    this.assetsStore.deleteAsset(this.sweepId, assetId).subscribe({
+      next: () => this.showToast('Asset deleted', 'app-toast-success'),
+      error: (err) => this.showToast(err.error ?? 'Could not delete asset', 'app-toast-error')
+    });
   }
 }
