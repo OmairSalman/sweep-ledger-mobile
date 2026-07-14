@@ -1,13 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>New Sweep</ion-title>
+    <ion-title>New User</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button [strong]="true" (click)="submit()" [disabled]="form.invalid || saving()">
-        @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
-        @else { Create }
+        Create
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,17 +17,23 @@
     <ion-list>
       <ion-item>
         <ion-input
-          label="Room code"
+          label="Name"
           labelPlacement="floating"
-          formControlName="roomCode"
-          placeholder="e.g. A204">
+          formControlName="name">
         </ion-input>
       </ion-item>
       <ion-item>
         <ion-input
-          label="Responsible person"
+          label="Username"
           labelPlacement="floating"
-          formControlName="responsiblePersonName">
+          formControlName="username">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          label="Password"
+          labelPlacement="floating"
+          formControlName="password">
         </ion-input>
       </ion-item>
     </ion-list>

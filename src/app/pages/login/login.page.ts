@@ -54,7 +54,7 @@ export class LoginPage implements ViewWillEnter {
         this.loading.set(false);
       },
       error:(err: HttpErrorResponse) => {
-        this.authStore.authError.set(err.error);
+        this.authStore.authError.set(err.error ?? 'Login failed');
         this.loading.set(false);
       }
     })
@@ -70,7 +70,7 @@ export class LoginPage implements ViewWillEnter {
     {
       if (error instanceof BiometryError && error.code !== BiometryErrorType.userCancel)
       {
-        alert('Biometric login error');
+        this.authStore.authError.set('Biometric login failed');
       }
       return;
     }
@@ -80,7 +80,7 @@ export class LoginPage implements ViewWillEnter {
       {
         if(user)
         {
-          this.router.navigate(['/tabs/tab1']);
+          this.router.navigate(['/tabs']);
           this.authStore.biometricDeclined.set(false);
         }
         else this.authStore.authError.set('Session expired, please log in');

@@ -13,7 +13,7 @@ import { CreateSweepPage } from 'src/app/pages/create-sweep/create-sweep.page';
   templateUrl: './sweeps-list.page.html',
   styleUrls: ['./sweeps-list.page.scss'],
   standalone: true,
-  imports: [RouterLink ,IonFab, IonFabButton, IonIcon, IonSpinner, IonText, IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, IonButton]
+  imports: [RouterLink ,IonFab, IonFabButton, IonIcon, IonSpinner, IonText, IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule]
 })
 export class SweepsListPage implements ViewWillEnter {
   sweepsStore = inject(SweepsStore);

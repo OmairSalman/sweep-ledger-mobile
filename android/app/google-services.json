@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374941704249",
+    "project_id": "sweep-ledger",
+    "storage_bucket": "sweep-ledger.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374941704249:android:4d25d1862e2cb4441aade8",
+        "android_client_info": {
+          "package_name": "com.pau.sweep_ledger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8btke4uhQasHwEYTN56btH78bjTpKp7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

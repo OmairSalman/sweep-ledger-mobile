@@ -14,8 +14,9 @@ export class Biometrics {
   async authenticate(): Promise<void>
   {
     return BiometricAuth.authenticate({
+      reason: 'Unlock to access your sweeps',
+      iosFallbackTitle: '',
       androidTitle: 'Sweep Ledger',
-      androidSubtitle: 'Unlock to access the app',
       cancelTitle: 'Cancel',
       allowDeviceCredential: false,
     });

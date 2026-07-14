@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonItem, IonLabel, IonList, IonListHeader, IonNote } from '@ionic/angular/standalone';
+import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonInput } from '@ionic/angular/standalone';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
@@ -11,7 +11,7 @@ import { AuthStore } from 'src/app/services/auth-store';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonNote, IonListHeader, IonList, IonLabel, IonItem, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonInput, IonNote, IonListHeader, IonList, IonLabel, IonItem, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterLink]
 })
 export class ProfilePage implements ViewWillEnter {
   authStore = inject(AuthStore);

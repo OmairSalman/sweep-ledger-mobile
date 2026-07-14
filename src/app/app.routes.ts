@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
+import { adminGuard } from './guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -17,5 +18,23 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'tabs',
     pathMatch: 'full',
+  },
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/admin/admin-panel/admin-panel.page').then( m => m.AdminPanelPage)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/admin/users-list/users-list.page').then(m => m.UsersListPage)
+      },
+    ]
+  },
+  {
+    path: 'create-user',
+    loadComponent: () => import('./pages/create-user/create-user.page').then( m => m.CreateUserPage)
   }
 ];
