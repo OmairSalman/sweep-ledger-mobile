@@ -4,44 +4,66 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button [strong]="true" (click)="submit()" [disabled]="form.invalid || saving()">
-        Create
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form">
-    <ion-list>
-      <ion-item>
-        <ion-input
-          label="Name"
-          labelPlacement="floating"
-          formControlName="name">
-        </ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input
-          label="Username"
-          labelPlacement="floating"
-          formControlName="username">
-        </ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input
-          label="Password"
-          labelPlacement="floating"
-          formControlName="password">
-        </ion-input>
-      </ion-item>
-    </ion-list>
-  </form>
+  <div class="modal-shell">
+    <form [formGroup]="form" class="modal-form">
+      <div class="pau-field">
+        <ion-icon name="person-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          formControlName="name"
+          placeholder="Name"
+          aria-label="Name" />
+      </div>
 
-  @if (errorMsg()) {
-    <ion-text color="danger">
-      <p class="error-text">{{ errorMsg() }}</p>
-    </ion-text>
-  }
+      <div class="pau-field">
+        <ion-icon name="at-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          formControlName="username"
+          placeholder="Username"
+          aria-label="Username"
+          autocomplete="off" />
+      </div>
+
+      <!--
+        Intentionally type="text", NOT type="password": an admin is setting a
+        password on someone else's behalf and needs to read it back clearly to
+        pass it on. Do not "fix" this to a masked field.
+      -->
+      <div class="pau-field">
+        <ion-icon name="key-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          formControlName="password"
+          placeholder="Password (min. 8 characters)"
+          aria-label="Password"
+          autocomplete="off" />
+      </div>
+    </form>
+
+    @if (errorMsg()) {
+      <div class="pau-notice pau-notice--error" role="alert">
+        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+        <ion-text color="danger">
+          <p class="error-text">{{ errorMsg() }}</p>
+        </ion-text>
+      </div>
+    }
+
+    <ion-button
+      class="pau-cta"
+      expand="block"
+      [strong]="true"
+      (click)="submit()"
+      [disabled]="form.invalid || saving()">
+      Create user
+    </ion-button>
+  </div>
 </ion-content>

@@ -4,8 +4,9 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonItemOption, IonItemOpti
 import { SweepsStore } from 'src/app/services/sweeps-store';
 import { Sweep } from 'src/models/sweep';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
-import { Router, RouterLink } from '@angular/router';
+import { add, businessOutline, cubeOutline, alertCircleOutline } from 'ionicons/icons';
+import { RouterLink } from '@angular/router';
+import { NavController } from '@ionic/angular/standalone';
 import { CreateSweepPage } from 'src/app/pages/create-sweep/create-sweep.page';
 
 @Component({
@@ -20,13 +21,13 @@ export class SweepsListPage implements ViewWillEnter {
   private toastController = inject(ToastController);
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
-  private router = inject(Router);
+  private navController = inject(NavController);
 
   loading = signal(false);
   errorMsg = signal('');
 
   constructor(){
-    addIcons({ add });
+    addIcons({ add, businessOutline, cubeOutline, alertCircleOutline });
   }
 
   ionViewWillEnter()
@@ -51,7 +52,12 @@ export class SweepsListPage implements ViewWillEnter {
     const { data, role } = await modal.onWillDismiss();
     if(role === 'confirm' && data)
     {
-      this.router.navigate(['/tabs/sweeps', data.id, 'scan']);
+      // Seed the new sweep's detail into the stack before opening the scanner,
+      // so backing out of the scanner lands on the sweep rather than here, and
+      // so sweep-scan's done() has a view to pop back onto. Unanimated: it is a
+      // stack entry, not a screen the user is meant to read on the way past.
+      await this.navController.navigateForward(['/tabs/sweeps', data.id], { animated: false });
+      await this.navController.navigateForward(['/tabs/sweeps', data.id, 'scan']);
     }
   }
 

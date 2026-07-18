@@ -1,0 +1,30 @@
+// Tabs shell — PAU design system.
+// Colours per ui_kits/sweep_ledger `.sl-tabbar` / `.sl-tab`: white surface,
+// hairline top border, muted bold labels, maroon when active.
+//
+// Deliberately NO --padding-top / --padding-bottom overrides here: ion-tab-bar
+// has a fixed height and exposes no height variable, so adding padding pushes
+// the icon and label past the bar and clips them. Ionic's own layout already
+// centres icon + label; only colour and type are restyled.
+
+ion-tab-bar {
+  --background: var(--pau-surface);
+  --border: 1px solid var(--pau-hairline);
+}
+
+ion-tab-button {
+  --color: var(--pau-ink-muted);
+  --color-selected: var(--ion-color-primary);
+  --ripple-color: var(--ion-color-primary);
+
+  ion-icon {
+    font-size: 22px;
+  }
+
+  ion-label {
+    font-size: var(--pau-text-2xs);
+    font-weight: var(--pau-weight-bold);
+    letter-spacing: var(--pau-tracking-normal);
+    text-transform: none;
+  }
+}

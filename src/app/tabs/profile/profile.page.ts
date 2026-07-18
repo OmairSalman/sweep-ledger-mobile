@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonItem, IonLabel, IonList, IonListHeader, IonNote, IonInput } from '@ionic/angular/standalone';
+import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonIcon } from '@ionic/angular/standalone';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline } from 'ionicons/icons';
 import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
@@ -11,7 +13,7 @@ import { AuthStore } from 'src/app/services/auth-store';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonInput, IonNote, IonListHeader, IonList, IonLabel, IonItem, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterLink]
+  imports: [IonIcon, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterLink]
 })
 export class ProfilePage implements ViewWillEnter {
   authStore = inject(AuthStore);
@@ -23,6 +25,10 @@ export class ProfilePage implements ViewWillEnter {
   newPassword = '';
   confirmPassword = '';
   changing = signal(false);
+
+  constructor() {
+    addIcons({ personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline });
+  }
 
   private async showToast(message: string)
   {

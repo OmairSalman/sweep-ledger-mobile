@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, ViewWillLeave, IonButton, IonText, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular/standalone';
 import { AssetsStore } from 'src/app/services/assets-store';
 import { BarcodeFormat, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import { addIcons } from 'ionicons';
+import { cameraOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-sweep-scan',
@@ -17,7 +20,7 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 })
 export class SweepScanPage implements ViewWillEnter, ViewWillLeave {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private navController = inject(NavController);
   assetsStore = inject(AssetsStore);
   sweepId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -26,6 +29,10 @@ export class SweepScanPage implements ViewWillEnter, ViewWillLeave {
   warning = signal('');
   warningType = signal<'duplicate' | 'error' | ''>('');
   permissionDenied = signal(false);
+
+  constructor() {
+    addIcons({ cameraOutline });
+  }
 
   private recentScans = new Map<string, number>;
   private readonly COOLDOWN_MS = 3000;
@@ -147,6 +154,16 @@ export class SweepScanPage implements ViewWillEnter, ViewWillLeave {
 
   done()
   {
-    this.router.navigate(['/tabs/sweeps', this.sweepId]);
+    // navigateBack pops the scanner off rather than stacking the detail on top
+    // of it, so Back from the detail reaches the sweeps list instead of
+    // re-opening the camera.
+    //
+    // This relies on the sweep detail already being in the outlet stack: Ionic's
+    // setBack() falls back to setRoot() when the target isn't found, which would
+    // wipe the stack and leave the detail as the only view (Back would then exit
+    // the tab). Both routes into the scanner guarantee it is present —
+    // sweep-detail pushes from itself, and sweeps-list seeds it before opening
+    // the scanner on a freshly created sweep.
+    this.navController.navigateBack(['/tabs/sweeps', this.sweepId]);
   }
 }

@@ -7,48 +7,108 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list class="info-list">
-    <ion-item>
-      <ion-label>Name</ion-label>
-      <ion-note slot="end">{{ authStore.currentUser()?.name }}</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-label>Username</ion-label>
-      <ion-note slot="end">{{ authStore.currentUser()?.username }}</ion-note>
-    </ion-item>
-  </ion-list>
+  <div class="profile-shell">
 
-  <ion-list>
-  <ion-list-header>
-    <ion-label>Change password</ion-label>
-  </ion-list-header>
+    <!-- Account info -->
+    <div class="pau-card">
+      <div class="pau-kv">
+        <span class="pau-kv__k">
+          <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+          Name
+        </span>
+        <span class="pau-kv__v">{{ authStore.currentUser()?.name }}</span>
+      </div>
+      <div class="pau-kv">
+        <span class="pau-kv__k">
+          <ion-icon name="at-outline" aria-hidden="true"></ion-icon>
+          Username
+        </span>
+        <span class="pau-kv__v">{{ authStore.currentUser()?.username }}</span>
+      </div>
+    </div>
 
-  <form (ngSubmit)="onChangePassword()">
-    <ion-item>
-      <ion-input label="Current password" labelPlacement="floating" type="password" name="currentPassword" [(ngModel)]="currentPassword"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input label="New password" labelPlacement="floating" type="password" name="newPassword" [(ngModel)]="newPassword"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input label="Confirm password" labelPlacement="floating" type="password" name="confirmPassword" [(ngModel)]="confirmPassword"></ion-input>
-    </ion-item>
-    @if (authStore.authError()) {
-      <ion-text color="danger">
-        <p class="error-text">{{ authStore.authError() }}</p>
-      </ion-text>
-    }
-    <ion-button type="submit" expand="block" [disabled]="changing()">
-      @if(changing()){
-        <ion-spinner name="circular" style="margin-right: 5px;"></ion-spinner>
-        <ion-text>Changing password...</ion-text>
+    <!-- Change password — the design system's SectionCard -->
+    <div class="pau-section">
+      <div class="pau-section__header">
+        <div class="pau-section__heading">
+          <h2 class="pau-section__title">Change password</h2>
+        </div>
+        <div class="pau-section__tile">
+          <ion-icon name="lock-closed-outline" aria-hidden="true"></ion-icon>
+        </div>
+      </div>
+
+      <div class="pau-section__body">
+        <form (ngSubmit)="onChangePassword()" class="password-form">
+          <div class="pau-field">
+            <ion-icon name="lock-closed-outline" class="field-icon" aria-hidden="true"></ion-icon>
+            <input
+              class="field-input"
+              type="password"
+              name="currentPassword"
+              placeholder="Current password"
+              aria-label="Current password"
+              autocomplete="current-password"
+              [(ngModel)]="currentPassword" />
+          </div>
+
+          <div class="pau-field">
+            <ion-icon name="key-outline" class="field-icon" aria-hidden="true"></ion-icon>
+            <input
+              class="field-input"
+              type="password"
+              name="newPassword"
+              placeholder="New password"
+              aria-label="New password"
+              autocomplete="new-password"
+              [(ngModel)]="newPassword" />
+          </div>
+
+          <div class="pau-field">
+            <ion-icon name="key-outline" class="field-icon" aria-hidden="true"></ion-icon>
+            <input
+              class="field-input"
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              aria-label="Confirm password"
+              autocomplete="new-password"
+              [(ngModel)]="confirmPassword" />
+          </div>
+
+          @if (authStore.authError()) {
+            <div class="pau-notice pau-notice--error" role="alert">
+              <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+              <ion-text color="danger">
+                <p class="error-text">{{ authStore.authError() }}</p>
+              </ion-text>
+            </div>
+          }
+
+          <ion-button class="pau-cta" type="submit" expand="block" [disabled]="changing()">
+            @if(changing()){
+              <ion-spinner name="circular"></ion-spinner>
+              <ion-text>Changing password...</ion-text>
+            }
+            @else {Change password}
+          </ion-button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Account actions -->
+    <div class="profile-actions">
+      @if (authStore.currentUser()?.role === 'Admin') {
+        <ion-button expand="block" fill="outline" routerLink="/admin">
+          <ion-icon slot="start" name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+          Admin Panel
+        </ion-button>
       }
-      @else {Change password}
-    </ion-button>
-  </form>
-</ion-list>
-@if (authStore.currentUser()?.role === 'Admin') {
-  <ion-button expand="block" routerLink="/admin">Admin Panel</ion-button>
-}
-<ion-button expand="block" color="danger" (click)="onLogout()">Log out</ion-button>
+      <ion-button expand="block" fill="outline" color="danger" (click)="onLogout()">
+        <ion-icon slot="start" name="log-out-outline" aria-hidden="true"></ion-icon>
+        Log out
+      </ion-button>
+    </div>
+
+  </div>
 </ion-content>

@@ -7,12 +7,21 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  @if(loading()){<ion-spinner name="circular"></ion-spinner>}
+  @if(loading()){
+    <div class="pau-state">
+      <ion-spinner name="circular"></ion-spinner>
+    </div>
+  }
 
   @if(errorMsg())
   {
-    <div class="error-state">
-      <ion-text color="danger">{{ errorMsg() }}</ion-text>
+    <div class="pau-state" role="alert">
+      <div class="pau-state__icon pau-state__icon--danger">
+        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="pau-state__text">
+        <ion-text color="danger" class="pau-state__title">{{ errorMsg() }}</ion-text>
+      </div>
     </div>
   }
 
@@ -20,9 +29,14 @@
   {
     @if(sweepsStore.sweeps().length === 0)
     {
-      <div class="empty-state">
-        <ion-label><h1>No sweeps yet</h1></ion-label>
-        <ion-text><h2>Tap + to start one</h2></ion-text>
+      <div class="pau-state">
+        <div class="pau-state__icon">
+          <ion-icon name="cube-outline" aria-hidden="true"></ion-icon>
+        </div>
+        <div class="pau-state__text">
+          <ion-label><h1 class="pau-state__title">No sweeps yet</h1></ion-label>
+          <ion-text><h2 class="pau-state__body">Tap + to start one</h2></ion-text>
+        </div>
       </div>
     }
     @else
@@ -30,12 +44,15 @@
       <ion-list>
         @for(sweep of sweepsStore.sweeps(); track sweep.id)
         {
-          <ion-item-sliding>
-            <ion-item [routerLink]="['/tabs/sweeps', sweep.id]" button detail>
+          <ion-item-sliding class="sweep-row">
+            <ion-item [routerLink]="['/tabs/sweeps', sweep.id]" button detail lines="none">
+              <div class="pau-tile" slot="start">
+                <ion-icon name="business-outline" aria-hidden="true"></ion-icon>
+              </div>
               <ion-label>
                 <h2>{{ sweep.roomCode }}</h2>
                 <p>{{ sweep.responsiblePersonName}}</p>
-                <p>{{ sweep.createdAt | date:'medium' }}</p>
+                <p class="sweep-row__date">{{ sweep.createdAt | date:'medium' }}</p>
               </ion-label>
             </ion-item>
 

@@ -9,6 +9,17 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+/*
+ * PAU brand font — the design system's confirmed portal stack, self-hosted
+ * rather than fetched from the Google Fonts CDN, so the app renders correctly
+ * offline (it ships as a native Capacitor app). These register the families
+ * 'Noto Kufi Arabic Variable' and 'Rubik Variable', which lead the stack in
+ * theme/variables.scss. Imported here rather than via angular.json `styles`
+ * so they hot-reload with the dev server instead of needing a restart.
+ */
+@import "@fontsource-variable/noto-kufi-arabic/index.css";
+@import "@fontsource-variable/rubik/index.css";
+
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 
@@ -36,9 +47,24 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+/* ============================================================
+   Toasts
+   ------------------------------------------------------------
+   Text colours are set explicitly rather than deferring to the
+   matching --ion-color-*-contrast token: two of those pairings do
+   not meet AA at body size.
+
+     success  #ffffff on #22a45d (light) = 3.21:1  FAIL
+              #000000 on #22a45d         = 6.54:1  fixed
+     error    #ffffff on #e04343 (dark)  = 4.16:1  FAIL
+              #000000 on #e04343         = 5.05:1  fixed
+
+   Light-mode success and dark-mode error therefore both take dark
+   text. Reported upstream to the design system.
+   ============================================================ */
 .app-toast-success {
   --background: var(--ion-color-success);
-  --color: var(--ion-color-success-contrast);
+  --color: #000000;
 }
 
 .app-toast-error {
@@ -46,8 +72,569 @@
   --color: var(--ion-color-danger-contrast);
 }
 
+@media (prefers-color-scheme: dark) {
+  /* Dark success is lighter (#2eb968) and its contrast token is already
+     #000000, so it needs no override — only error does. */
+  .app-toast-error {
+    --color: #000000;
+  }
+}
+
+ion-toast {
+  --border-radius: var(--pau-radius-md);
+  --box-shadow: var(--pau-shadow-md);
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-semibold);
+}
+
+/* ============================================================
+   Alerts
+   ============================================================ */
 .alert-danger-btn.alert-button {
   color: var(--ion-color-danger) !important;
+}
+
+/* Dark danger on the dark alert surface is 4.09:1; the tint reaches 4.64:1. */
+@media (prefers-color-scheme: dark) {
+  .alert-danger-btn.alert-button {
+    color: var(--ion-color-danger-tint) !important;
+  }
+}
+
+.alert-wrapper {
+  border-radius: var(--pau-radius-lg) !important;
+  box-shadow: var(--pau-shadow-lg) !important;
+}
+
+.alert-head {
+  padding-block-end: var(--pau-space-2);
+}
+
+.alert-title {
+  font-size: var(--pau-text-md) !important;
+  font-weight: var(--pau-weight-bold) !important;
+}
+
+.alert-message {
+  font-size: var(--pau-text-sm) !important;
+  line-height: var(--pau-leading-snug) !important;
+}
+
+.alert-button {
+  font-weight: var(--pau-weight-semibold) !important;
+  text-transform: none !important;
+  letter-spacing: var(--pau-tracking-normal) !important;
+}
+
+/* ============================================================
+   .pau-field — shared text field (PAU design system)
+   ------------------------------------------------------------
+   Replicates the PAU portal's login field: a raised pill holding a
+   single centred row — leading maroon glyph, then the input, with
+   the field's name as hint text inside it. No floating label, so
+   nothing moves and there is nothing to misalign; the glyph and the
+   text are centred by the same `align-items: center`.
+
+   Markup contract:
+     .pau-field > .field-icon + .field-input
+
+   Accessibility: because the hint doubles as the visible name, every
+   .field-input MUST carry an aria-label — the placeholder alone is
+   not an accessible name and disappears once the user types.
+
+   Built on a native input rather than ion-input: ion-input cannot
+   render a borderless pill with a leading glyph without either
+   force-floating the label (its hasStartEndSlots workaround,
+   TODO FW-5592) or leaving the glyph unable to align with the text
+   ("the input is not vertically centered in the container, but the
+   label is" — Ionic's own source note).
+   ============================================================ */
+.pau-field {
+  display: flex;
+  align-items: center;
+  gap: var(--pau-space-3);
+  padding-inline: var(--pau-space-4);
+  min-block-size: 56px;
+  background: var(--ion-item-background);
+  border-radius: var(--pau-radius-lg);
+  box-shadow: var(--pau-shadow-sm);
+  transition: box-shadow var(--pau-dur-fast) var(--pau-ease);
+}
+
+.pau-field:focus-within {
+  box-shadow:
+    var(--pau-shadow-sm),
+    0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.35);
+}
+
+.pau-field .field-icon {
+  flex: none;
+  font-size: 20px;
+  color: var(--ion-color-primary);
+}
+
+.pau-field .field-input {
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--pau-ink);
+  font-family: inherit;
+  font-size: var(--pau-text-base);
+  line-height: 1.4;
+}
+
+.pau-field .field-input::placeholder {
+  color: var(--pau-ink-muted);
+  opacity: 1; /* Firefox dims placeholders by default */
+}
+
+/* Multiline variant. The single-line pill centres its children, which would
+   float the glyph against the middle of a tall box — so alignment switches to
+   the start and the glyph is nudged down onto the first text line. */
+.pau-field--multiline {
+  align-items: flex-start;
+  padding-block: var(--pau-space-4);
+}
+
+.pau-field--multiline .field-icon {
+  margin-block-start: 2px;
+}
+
+textarea.field-input {
+  resize: none;
+  min-block-size: 96px;
+  font-family: inherit;
+  line-height: var(--pau-leading-normal);
+}
+
+/* Trailing in-field action — e.g. the show/hide password toggle. A real
+   <button> so it is keyboard-reachable; type="button" so it never submits the
+   form it sits in. 44px hit target per touch guidance, with negative inline
+   margin so the larger tap area doesn't visually widen the pill. */
+.pau-field .field-action {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  margin-inline-end: calc(var(--pau-space-2) * -1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pau-ink-muted);
+  cursor: pointer;
+}
+
+.pau-field .field-action ion-icon {
+  font-size: 20px;
+  pointer-events: none;
+}
+
+.pau-field .field-action:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: -2px;
+  border-radius: var(--pau-radius-sm);
+}
+
+/* Inside a card the pill inverts: the design system's in-app field is the
+   "light gray field #f2f3f5" on a "white card". The white-pill-on-gray-page
+   treatment belongs to the portal's login, where the field sits on the page
+   itself and needs the shadow to lift it off the background. On a white card a
+   white pill would be invisible. */
+.pau-card .pau-field,
+.pau-section__body .pau-field {
+  background: var(--pau-bg);
+  box-shadow: none;
+}
+
+.pau-card .pau-field:focus-within,
+.pau-section__body .pau-field:focus-within {
+  box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pau-field {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   Toolbar — solid maroon header (design system)
+   ============================================================ */
+ion-header ion-toolbar {
+  --border-width: 0;
+}
+
+ion-title {
+  font-size: var(--pau-text-lg);
+  font-weight: var(--pau-weight-bold);
+}
+
+/* ============================================================
+   .pau-tile — icon tile (design system)
+   ------------------------------------------------------------
+   Rounded-square glyph holder; the leading element on list rows
+   and section headers.
+
+   Deliberately SOLID rather than the DS's soft tint. The dark
+   palette's maroon (#8a1a13) is near-black, so a maroon glyph
+   fails against every dark surface: 1.88:1 on --pau-maroon-soft,
+   1.81:1 on a card, 1.99:1 on the page background. Solid fill
+   with the contrast glyph measures 12.8:1 light / 9.4:1 dark.
+   ============================================================ */
+.pau-tile {
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--pau-radius-tile);
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  display: grid;
+  place-items: center;
+}
+
+.pau-tile ion-icon {
+  font-size: 22px;
+}
+
+/* ============================================================
+   .pau-cta — the app's primary full-width action (design system)
+   ------------------------------------------------------------
+   "Use `expand` for full-width CTAs (the common case in the app)"
+   — Button.prompt.md. Pair with expand="block".
+   Sentence case, never ALL-CAPS. Keeps its coloured drop shadow,
+   which is dropped while disabled so the button reads as inert.
+   ============================================================ */
+.pau-cta {
+  block-size: 56px;
+  --border-radius: var(--pau-radius-lg);
+  --box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.3);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
+  transition: transform var(--pau-dur-fast) var(--pau-ease);
+}
+
+.pau-cta:active {
+  transform: scale(var(--pau-press-scale));
+}
+
+.pau-cta.button-disabled {
+  --box-shadow: none;
+}
+
+.pau-cta ion-spinner {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pau-cta {
+    transition: none;
+  }
+
+  .pau-cta:active {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   .pau-notice — inline message on a soft tint (design system)
+   ------------------------------------------------------------
+   Markup: .pau-notice.pau-notice--error > ion-icon + text
+   ============================================================ */
+.pau-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pau-space-2);
+  padding: var(--pau-space-3) var(--pau-space-4);
+  border-radius: var(--pau-radius-md);
+}
+
+.pau-notice ion-icon {
+  flex: none;
+  font-size: 18px;
+  margin-block-start: 1px;
+}
+
+.pau-notice p {
+  margin: 0;
+  text-align: start;
+  font-size: var(--pau-text-sm);
+  line-height: var(--pau-leading-snug);
+}
+
+/* Let the notice drive the colour instead of ion-text's own palette, so the
+   dark-mode correction below actually applies to the message text. */
+.pau-notice ion-text {
+  --ion-color-base: currentColor;
+}
+
+.pau-notice--error {
+  background: var(--pau-red-soft);
+  color: var(--ion-color-danger);
+}
+
+/* Dark's --ion-color-danger (#e04343) is 4.23:1 on --pau-red-soft (#2a1212),
+   just under AA's 4.5:1 for body text. The tint (#e35656) measures 4.80:1.
+   Light's base danger is already fine at 4.80:1, so this is dark-only. */
+@media (prefers-color-scheme: dark) {
+  .pau-notice--error {
+    color: var(--ion-color-danger-tint);
+  }
+}
+
+/* ============================================================
+   .pau-card — the design system's plain white rounded panel
+   ============================================================ */
+.pau-card {
+  padding: var(--pau-space-1) var(--pau-space-5);
+  border-radius: var(--pau-radius-lg);
+  background: var(--ion-card-background);
+  box-shadow: var(--pau-shadow-sm);
+}
+
+/* ============================================================
+   .pau-section — SectionCard (design system's signature pattern)
+   ------------------------------------------------------------
+   "a coloured header band (with a rounded-square icon tile) over a
+   white body — the signature grouping device." The header tile is
+   translucent and sits on the TRAILING side.
+
+   Markup:
+     .pau-section[.pau-section--tertiary|--secondary|--success]
+       > .pau-section__header
+           > .pau-section__heading > .pau-section__eyebrow
+                                   + .pau-section__title
+                                   + .pau-section__subtitle
+           + .pau-section__tile > ion-icon
+       > .pau-section__body
+   ============================================================ */
+.pau-section {
+  border-radius: var(--pau-radius-xl);
+  overflow: hidden;
+  background: var(--ion-card-background);
+  box-shadow: var(--pau-shadow-sm);
+}
+
+.pau-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pau-space-4);
+  padding: var(--pau-space-5);
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.pau-section--tertiary .pau-section__header {
+  background: var(--ion-color-tertiary);
+  color: var(--ion-color-tertiary-contrast);
+}
+
+/* Gold: --ion-color-secondary-contrast is #000 — white on gold is 3.06:1. */
+.pau-section--secondary .pau-section__header {
+  background: var(--ion-color-secondary);
+  color: var(--ion-color-secondary-contrast);
+}
+
+.pau-section--success .pau-section__header {
+  background: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
+}
+
+.pau-section__eyebrow {
+  margin: 0 0 2px;
+  font-size: var(--pau-text-xs);
+  font-weight: var(--pau-weight-semibold);
+  opacity: 0.85;
+  line-height: var(--pau-leading-snug);
+}
+
+.pau-section__title {
+  margin: 0;
+  font-size: var(--pau-text-xl);
+  font-weight: var(--pau-weight-bold);
+  line-height: var(--pau-leading-tight);
+  word-break: break-word;
+}
+
+.pau-section__subtitle {
+  margin: 2px 0 0;
+  font-size: var(--pau-text-sm);
+  opacity: 0.85;
+  line-height: var(--pau-leading-snug);
+}
+
+/* Translucent tile, trailing side. color-mix keys off the header's own text
+   colour so it stays legible on gold (dark ink) as well as maroon (white ink);
+   the rgba above is the fallback for engines without color-mix. */
+.pau-section__tile {
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--pau-radius-tile);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.pau-section__tile ion-icon {
+  font-size: 22px;
+}
+
+.pau-section__body {
+  padding: var(--pau-space-1) var(--pau-space-5) var(--pau-space-3);
+}
+
+/* ============================================================
+   .pau-kv — key/value row, per ui_kits/sweep_ledger `.sl-kv`
+   ============================================================ */
+.pau-kv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pau-space-3);
+  padding-block: var(--pau-space-3);
+  border-block-end: 1px solid var(--pau-hairline);
+}
+
+.pau-kv:last-child {
+  border-block-end: none;
+}
+
+.pau-kv__k {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--pau-space-2);
+  color: var(--pau-ink-muted);
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-semibold);
+}
+
+/* Optional leading glyph. It inherits the label's muted colour rather than
+   taking brand maroon: unlike .pau-tile, this glyph sits bare on the card with
+   no fill to carry it, and dark-mode maroon (#8a1a13) is only 1.81:1 there —
+   the tint reaches just 2.23:1. --pau-ink-muted holds 3.45:1 light / 6.04:1
+   dark, and matching the label reads as one unit. */
+.pau-kv__k ion-icon {
+  flex: none;
+  font-size: 18px;
+}
+
+.pau-kv__v {
+  min-inline-size: 0;
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  text-align: end;
+  word-break: break-word;
+}
+
+/* DS: mono is for asset codes / barcodes. */
+.pau-kv__v--mono {
+  font-family: var(--pau-font-mono);
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-semibold);
+}
+
+/* ============================================================
+   FAB — rounded square, per ui_kits/sweep_ledger `.sl-fab`
+   ============================================================ */
+ion-fab-button {
+  --size: 60px;
+  --border-radius: 20px;
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --background-focused: var(--ion-color-primary-shade);
+  --color: var(--ion-color-primary-contrast);
+  --box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.4);
+}
+
+ion-fab-button ion-icon {
+  font-size: 28px;
+}
+
+/* ============================================================
+   .pau-state — shared centred empty / loading / error state
+   ============================================================ */
+.pau-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--pau-space-5);
+  padding: var(--pau-space-10) var(--pau-space-6);
+  min-block-size: 55vh;
+}
+
+.pau-state__icon {
+  inline-size: 88px;
+  block-size: 88px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.pau-state__icon ion-icon {
+  font-size: 38px;
+}
+
+.pau-state__icon--danger {
+  background: var(--ion-color-danger);
+  color: var(--ion-color-danger-contrast);
+}
+
+.pau-state__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pau-space-2);
+}
+
+.pau-state__title {
+  margin: 0;
+  font-size: var(--pau-text-lg);
+  font-weight: var(--pau-weight-bold);
+  line-height: var(--pau-leading-snug);
+}
+
+.pau-state__body {
+  margin: 0;
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-regular);
+  color: var(--pau-ink-muted);
+  line-height: var(--pau-leading-snug);
+}
+
+.pau-state ion-spinner {
+  inline-size: 36px;
+  block-size: 36px;
+  color: var(--ion-color-primary);
+}
+
+/* Stacked actions under a state — e.g. "Try again" / "Back to sweep". */
+.pau-state__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: var(--pau-space-2);
+  max-inline-size: 320px;
+  margin-inline: auto;
+}
+
+.pau-state__actions ion-button {
+  font-weight: var(--pau-weight-semibold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
 }
 
 body.scanner-active {

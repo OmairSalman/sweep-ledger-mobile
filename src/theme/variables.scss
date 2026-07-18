@@ -1,2 +1,358 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// ============================================================
+//  PAU Sweep Ledger — theme/variables.scss
+//  ------------------------------------------------------------
+//  Source: "PAU Sweep Ledger Design System" (claude.ai/design),
+//  theme/variables.scss + tokens/colors.css + tokens/typography.css
+//  + tokens/spacing.css + tokens/dark.css.
+//
+//  ACCESSIBILITY: white text on gold #bd8b15 is 3.06:1 and FAILS
+//  WCAG AA. --ion-color-secondary-contrast is #000000 (6.87:1).
+//  Keep it that way — put dark text/icons on any gold surface.
+//
+//  DIRECTION: the PAU design system is authored Arabic-first/RTL,
+//  but THIS APP IS ENGLISH + LTR and must stay that way — do not
+//  set dir="rtl". All component CSS is still authored with logical
+//  properties (margin-inline-start, padding-inline-end,
+//  inset-inline-*, text-align: start) so a future RTL switch is a
+//  config flip rather than a rewrite.
+//
+//  FONT: the design system's confirmed PAU stack, but self-hosted
+//  instead of fetched from the Google Fonts CDN at runtime — this
+//  is a native Capacitor app that must render correctly offline.
+//  @fontsource-variable/{noto-kufi-arabic,rubik} are bundled via
+//  angular.json `styles`. Those packages register the families as
+//  'Noto Kufi Arabic Variable' / 'Rubik Variable', so those names
+//  lead the stack; the plain DS names are kept behind them as a
+//  fallback for locally-installed copies. Variable fonts carry the
+//  full 100-900 axis, so every weight the DS uses (400-800) is a
+//  real cut rather than a synthesized faux-bold.
+// ============================================================
+
+// ============================================================
+//  DARK PALETTE
+//  Emitted for BOTH the Ionic `.ion-palette-dark` class and
+//  `prefers-color-scheme: dark`. The design system ships the class
+//  form only, but nothing in this app toggles that class (adding a
+//  toggle would mean touching TS). global.scss imports Ionic's
+//  dark.system.css, which is media-query driven — so the media
+//  query is what actually carries dark mode here.
+// ============================================================
+@mixin pau-dark-palette {
+  --ion-color-primary:              #8a1a13;
+  --ion-color-primary-rgb:          138, 26, 19;
+  --ion-color-primary-contrast:     #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade:        #79170f;
+  --ion-color-primary-tint:         #963029;
+
+  --ion-color-secondary:              #d4a02a;
+  --ion-color-secondary-rgb:          212, 160, 42;
+  --ion-color-secondary-contrast:     #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade:        #bb8d25;
+  --ion-color-secondary-tint:         #d8aa3f;
+
+  --ion-color-tertiary:              #4aa8f5;
+  --ion-color-tertiary-rgb:          74, 168, 245;
+  --ion-color-tertiary-contrast:     #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade:        #4194d8;
+  --ion-color-tertiary-tint:         #5cb1f6;
+
+  --ion-color-success:              #2eb968;
+  --ion-color-success-rgb:          46, 185, 104;
+  --ion-color-success-contrast:     #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade:        #28a35c;
+  --ion-color-success-tint:         #43c077;
+
+  --ion-color-warning:              #f5c02b;
+  --ion-color-warning-rgb:          245, 192, 43;
+  --ion-color-warning-contrast:     #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade:        #d8a926;
+  --ion-color-warning-tint:         #f6c640;
+
+  --ion-color-danger:               #e04343;
+  --ion-color-danger-rgb:           224, 67, 67;
+  --ion-color-danger-contrast:      #ffffff;
+  --ion-color-danger-contrast-rgb:  255, 255, 255;
+  --ion-color-danger-shade:         #c53b3b;
+  --ion-color-danger-tint:          #e35656;
+
+  --ion-color-dark:                 #f2f3f5;
+  --ion-color-dark-rgb:             242, 243, 245;
+  --ion-color-dark-contrast:        #000000;
+  --ion-color-dark-contrast-rgb:    0, 0, 0;
+  --ion-color-dark-shade:           #d5d6d8;
+  --ion-color-dark-tint:            #f3f4f6;
+
+  --ion-color-medium:               #9a9a9a;
+  --ion-color-medium-rgb:           154, 154, 154;
+  --ion-color-medium-contrast:      #000000;
+  --ion-color-medium-contrast-rgb:  0, 0, 0;
+  --ion-color-medium-shade:         #888888;
+  --ion-color-medium-tint:          #a4a4a4;
+
+  --ion-color-light:                #1e1e20;
+  --ion-color-light-rgb:            30, 30, 32;
+  --ion-color-light-contrast:       #ffffff;
+  --ion-color-light-contrast-rgb:   255, 255, 255;
+  --ion-color-light-shade:          #1a1a1c;
+  --ion-color-light-tint:           #38383a;
+
+  --ion-background-color:     #121214;
+  --ion-background-color-rgb: 18, 18, 20;
+  --ion-text-color:           #f2f2f4;
+  --ion-text-color-rgb:       242, 242, 244;
+
+  --ion-toolbar-background:   #2a0806;
+  --ion-toolbar-color:        #ffffff;
+
+  --ion-item-background:      #1c1c1f;
+  --ion-card-background:      #1c1c1f;
+  --ion-border-color:         #2c2c30;
+
+  /* Brand aliases (dark) */
+  --pau-maroon:        #8a1a13;
+  --pau-maroon-deep:   #2a0806;
+  --pau-maroon-soft:   #2a1210;
+  --pau-gold:          #d4a02a;
+  --pau-gold-soft:     #2c2410;
+  --pau-blue:          #4aa8f5;
+  --pau-blue-soft:     #12222f;
+  --pau-green:         #2eb968;
+  --pau-green-soft:    #10261a;
+  --pau-amber:         #f5c02b;
+  --pau-red:           #e04343;
+  --pau-red-soft:      #2a1212;
+
+  --pau-surface:       #1c1c1f;
+  --pau-bg:            #121214;
+  --pau-ink:           #f2f2f4;
+  --pau-ink-muted:     #9a9a9a;
+  --pau-hairline:      #2c2c30;
+}
+
+:root {
+  --ion-font-family: var(--pau-font-family);
+
+  /** primary — PAU maroon **/
+  --ion-color-primary:              #670e0a;
+  --ion-color-primary-rgb:          103, 14, 10;
+  --ion-color-primary-contrast:     #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade:        #5b0c09;
+  --ion-color-primary-tint:         #761a16;
+
+  /** secondary — PAU gold — DARK contrast for AA **/
+  --ion-color-secondary:              #bd8b15;
+  --ion-color-secondary-rgb:          189, 139, 21;
+  --ion-color-secondary-contrast:     #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade:        #a67a12;
+  --ion-color-secondary-tint:         #c4972c;
+
+  /** tertiary — info blue **/
+  --ion-color-tertiary:              #2196f3;
+  --ion-color-tertiary-rgb:          33, 150, 243;
+  --ion-color-tertiary-contrast:     #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade:        #1d84d6;
+  --ion-color-tertiary-tint:         #37a1f4;
+
+  /** success — pass green **/
+  --ion-color-success:              #22a45d;
+  --ion-color-success-rgb:          34, 164, 93;
+  --ion-color-success-contrast:     #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade:        #1e9052;
+  --ion-color-success-tint:         #38ad6d;
+
+  /** warning — status amber — DARK contrast **/
+  --ion-color-warning:              #f5b912;
+  --ion-color-warning-rgb:          245, 185, 18;
+  --ion-color-warning-contrast:     #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade:        #d8a310;
+  --ion-color-warning-tint:         #f6c02b;
+
+  /** danger — alert red **/
+  --ion-color-danger:               #c62828;
+  --ion-color-danger-rgb:           198, 40, 40;
+  --ion-color-danger-contrast:      #ffffff;
+  --ion-color-danger-contrast-rgb:  255, 255, 255;
+  --ion-color-danger-shade:         #ae2323;
+  --ion-color-danger-tint:          #cc3838;
+
+  /** dark **/
+  --ion-color-dark:                 #2b2b2b;
+  --ion-color-dark-rgb:             43, 43, 43;
+  --ion-color-dark-contrast:        #ffffff;
+  --ion-color-dark-contrast-rgb:    255, 255, 255;
+  --ion-color-dark-shade:           #262626;
+  --ion-color-dark-tint:            #404040;
+
+  /** medium **/
+  --ion-color-medium:               #8a8a8a;
+  --ion-color-medium-rgb:           138, 138, 138;
+  --ion-color-medium-contrast:      #ffffff;
+  --ion-color-medium-contrast-rgb:  255, 255, 255;
+  --ion-color-medium-shade:         #797979;
+  --ion-color-medium-tint:          #969696;
+
+  /** light **/
+  --ion-color-light:                #f2f3f5;
+  --ion-color-light-rgb:            242, 243, 245;
+  --ion-color-light-contrast:       #2b2b2b;
+  --ion-color-light-contrast-rgb:   43, 43, 43;
+  --ion-color-light-shade:          #d5d6d8;
+  --ion-color-light-tint:           #f3f4f6;
+
+  /** global surfaces / text (light) **/
+  --ion-background-color:     #f2f3f5;
+  --ion-background-color-rgb: 242, 243, 245;
+  --ion-text-color:           #2b2b2b;
+  --ion-text-color-rgb:       43, 43, 43;
+
+  --ion-toolbar-background:   #670e0a;
+  --ion-toolbar-color:        #ffffff;
+
+  --ion-item-background:      #ffffff;
+  --ion-card-background:      #ffffff;
+  --ion-border-color:         #e6e7ea;
+
+  /* ---- Ionic text-color step ramp (light) ---- */
+  --ion-color-step-50:   #eeeef0;
+  --ion-color-step-100:  #dcdde0;
+  --ion-color-step-150:  #cbccd0;
+  --ion-color-step-200:  #bababf;
+  --ion-color-step-300:  #97989f;
+  --ion-color-step-400:  #75767f;
+  --ion-color-step-500:  #55565f;
+  --ion-color-step-600:  #44454d;
+  --ion-color-step-700:  #33343a;
+  --ion-color-step-800:  #222227;
+  --ion-color-step-850:  #17171a;
+  --ion-color-step-900:  #0d0d0f;
+
+  /* ============================================================
+     BRAND PALETTE aliases (non-Ionic)
+     ============================================================ */
+  --pau-maroon:        #670e0a;
+  --pau-maroon-deep:   #5b0c09;
+  --pau-maroon-soft:   #f5e9e8;   /* tinted maroon surface */
+  --pau-gold:          #bd8b15;
+  --pau-gold-soft:     #fbf3dc;   /* cream notice background */
+  --pau-blue:          #2196f3;
+  --pau-blue-soft:     #e3f1fd;
+  --pau-green:         #22a45d;
+  --pau-green-soft:    #e5f5ec;
+  --pau-amber:         #f5b912;
+  --pau-red:           #c62828;
+  --pau-red-soft:      #fbe9e9;
+
+  --pau-surface:       #ffffff;
+  --pau-bg:            #f2f3f5;
+  --pau-ink:           #2b2b2b;
+  // Darkened from the design system's #8a8a8a, which fails WCAG AA for body
+  // text on its own surfaces: 3.45:1 on a white card and 3.11:1 on the #f2f3f5
+  // page, against the 4.5:1 requirement. This token carries every piece of
+  // muted text in the app — field placeholders (which double as our visible
+  // labels), kv keys, state subtitles, list secondary lines and inactive tab
+  // labels — so the failure was app-wide. #6b6b6b measures 5.33:1 / 4.80:1 and
+  // still reads clearly muted next to --pau-ink (14.16:1). Dark mode's
+  // #9a9a9a already passes (6.04:1) and is unchanged. Reported upstream.
+  --pau-ink-muted:     #6b6b6b;
+  --pau-hairline:      #e6e7ea;
+
+  /* ============================================================
+     TYPOGRAPHY
+     Noto Kufi Arabic drives the whole UI; Rubik is the Latin
+     fallback (per-glyph fall-through). No serif anywhere.
+     Hierarchy comes from weight/size.
+     ============================================================ */
+  --pau-font-family: 'Noto Kufi Arabic Variable', 'Noto Kufi Arabic', 'Rubik Variable', 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --pau-font-display: var(--pau-font-family);
+  --pau-font-mono: ui-monospace, Menlo, Consolas, monospace; /* asset codes / barcodes */
+
+  --pau-text-2xs:  11px;
+  --pau-text-xs:   12px;
+  --pau-text-sm:   14px;
+  --pau-text-base: 16px;
+  --pau-text-md:   18px;
+  --pau-text-lg:   20px;
+  --pau-text-xl:   24px;
+  --pau-text-2xl:  28px;
+  --pau-text-3xl:  34px;
+  --pau-text-4xl:  44px;   /* big stat numbers */
+
+  --pau-weight-regular:  400;
+  --pau-weight-medium:   500;
+  --pau-weight-semibold: 600;
+  --pau-weight-bold:     700;
+  --pau-weight-black:    800;
+
+  --pau-leading-tight:  1.2;
+  --pau-leading-snug:   1.35;
+  --pau-leading-normal: 1.55;
+
+  --pau-tracking-normal: 0;
+  --pau-tracking-caps: 0.02em; /* Latin all-caps labels only */
+
+  /* ============================================================
+     SPACING / RADIUS / ELEVATION / MOTION
+     ============================================================ */
+  --pau-space-0:  0;
+  --pau-space-1:  4px;
+  --pau-space-2:  8px;
+  --pau-space-3:  12px;
+  --pau-space-4:  16px;
+  --pau-space-5:  20px;
+  --pau-space-6:  24px;
+  --pau-space-8:  32px;
+  --pau-space-10: 40px;
+  --pau-space-12: 48px;
+
+  --pau-page-gutter: 16px;   /* screen side padding */
+  --pau-card-gap:    16px;   /* vertical gap between cards */
+
+  --pau-radius-sm:   10px;
+  --pau-radius-md:   14px;
+  --pau-radius-lg:   18px;   /* standard card */
+  --pau-radius-xl:   22px;   /* section / hero card */
+  --pau-radius-tile: 16px;   /* coloured icon squares */
+  --pau-radius-pill: 999px;
+
+  --ion-card-radius: var(--pau-radius-lg);
+
+  --pau-shadow-xs: 0 1px 2px rgba(15, 15, 20, 0.06);
+  --pau-shadow-sm: 0 2px 8px rgba(15, 15, 20, 0.07);
+  --pau-shadow-md: 0 6px 18px rgba(15, 15, 20, 0.09);
+  --pau-shadow-lg: 0 12px 32px rgba(15, 15, 20, 0.14);
+  --pau-shadow-toolbar: 0 2px 10px rgba(103, 14, 10, 0.20);
+
+  --pau-border: 1px solid var(--pau-hairline);
+
+  --pau-ease:     cubic-bezier(0.4, 0, 0.2, 1);
+  --pau-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pau-dur-fast: 140ms;
+  --pau-dur:      220ms;
+  --pau-dur-slow: 360ms;
+
+  --pau-press-scale: 0.97;
+}
+
+/* Class-toggled dark (Ionic's own class + the design system's `.dark`) */
+.ion-palette-dark,
+:root.ion-palette-dark,
+.dark {
+  @include pau-dark-palette;
+}
+
+/* System dark — this is the one that actually fires in this app */
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include pau-dark-palette;
+  }
+}

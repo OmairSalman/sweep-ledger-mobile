@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "WebSearch",
+      "WebFetch(domain:ionicframework.com)",
+      "Bash(npx ng *)",
+      "Bash(awk '/<ion-header>/,/<\\\\/ion-header>/' src/app/pages/create-sweep/create-sweep.page.html)",
+      "Bash(grep -vE \"ionicons|IonIcon|imports:|addIcons|constructor|^\\\\+$|^\\\\-$\")"
+    ]
+  }
+}

@@ -1,60 +1,114 @@
+// Login — PAU design system, modelled on the PAU portal app's login screen.
+// Structure per the reference: no wrapping card — the logo tile, each field and
+// each button are individually raised surfaces floating on the flat light field.
+// Authored with logical properties throughout so a future RTL switch is a config
+// flip, not a rewrite.
+
 ion-content {
-  --padding-top: 16px;
-  --padding-bottom: 16px;
-  --padding-start: 20px;
-  --padding-end: 20px;
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-6);
+  --padding-bottom: var(--pau-space-6);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
 }
 
-h1 {
+.login-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pau-space-8);
+  max-inline-size: 420px;
+  margin-inline: auto;
+  padding-block-start: var(--pau-space-4);
+}
+
+/* ---- Brand: the app-icon treatment — logo on a white squircle ---- */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pau-space-5);
   text-align: center;
-  margin-bottom: 8px;
+}
+
+.brand-card {
+  inline-size: 200px;
+  max-inline-size: 55%;
+  aspect-ratio: 1;
+  padding: var(--pau-space-5);
+  border-radius: 30px;
+  background: var(--pau-surface);
+  box-shadow: var(--pau-shadow-md);
+  display: grid;
+  place-items: center;
+
+  // Real logo, once approved.
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+}
+
+// Placeholder standing in for the brand mark.
+.brand-placeholder {
+  font-size: 84px;
+  color: var(--ion-color-primary);
+}
+
+// The reference screen has no H1 — the logo carries the title and a single
+// muted line sits under it. Keep the existing copy, styled to that role.
+.login-brand h1 {
+  margin: 0;
+  color: var(--pau-ink-muted);
+  font-size: var(--pau-text-md);
+  font-weight: var(--pau-weight-semibold);
+  line-height: var(--pau-leading-snug);
+  letter-spacing: var(--pau-tracking-normal);
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 420px;
-  margin: 0 auto;
+  gap: var(--pau-space-4);
 }
 
-ion-input {
-  --background: var(--ion-background-color-step-100);
-  --color: var(--ion-text-color);
-  --border-radius: 10px;
-  --padding-start: 14px;
-  --padding-end: 14px;
-}
+// Fields use the shared .pau-field pattern in global.scss.
 
-.error-text {
-  font-size: 0.85rem;
-  margin: 4px 0 0;
-  text-align: center;
-}
+// The error notice uses the shared .pau-notice pattern in global.scss.
 
-.register-link {
-  display: flex;
-  justify-content: center;   // centers the button horizontally
-}
-
+/* ---- Actions ----
+   Both buttons carry .pau-cta (global.scss) for the shared maroon treatment,
+   press dip and reduced-motion handling. Only the row layout lives here. */
 .login-actions {
   display: flex;
   flex-direction: row;
-  gap: 8px;
-  margin-top: 8px;
+  gap: var(--pau-space-3);
   align-items: stretch;
-}
+  margin-block-start: var(--pau-space-2);
 
-.login-actions ion-button {
-  height: 44px;     // explicit, matching height for both
-  margin-top: 0;
-}
+  ion-button {
+    margin: 0;
+  }
 
-.login-actions ion-button[type="submit"] {
-  flex: 1;          // login button grows to fill available width
-  margin-top: 0;    // override the old margin-top: 8px (now on the row)
+  ion-button[type="submit"] {
+    flex: 1;
+
+    ion-icon[slot="start"] {
+      font-size: 20px;
+      margin-inline-end: var(--pau-space-2);
+    }
+  }
+
+  ion-spinner {
+    margin-inline-end: var(--pau-space-2);
+  }
 }
 
 .biometric-btn {
-  flex: 0 0 auto;   // don't grow, don't shrink — just fit the icon
+  flex: 0 0 auto;
+  inline-size: 64px;
+
+  ion-icon {
+    font-size: 26px;
+  }
 }

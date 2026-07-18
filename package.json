@@ -35,6 +35,8 @@
     "@capacitor/keyboard": "8.0.5",
     "@capacitor/push-notifications": "^8.1.1",
     "@capacitor/status-bar": "8.0.2",
+    "@fontsource-variable/noto-kufi-arabic": "^5.2.9",
+    "@fontsource-variable/rubik": "^5.2.8",
     "@ionic/angular": "^8.0.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",

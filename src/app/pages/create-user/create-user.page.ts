@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonList, IonItem, IonText, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonText, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { personOutline, atOutline, keyOutline, alertCircleOutline } from 'ionicons/icons';
 import { UsersStore } from 'src/app/services/users-store';
 
 @Component({
@@ -9,7 +11,7 @@ import { UsersStore } from 'src/app/services/users-store';
   templateUrl: './create-user.page.html',
   styleUrls: ['./create-user.page.scss'],
   standalone: true,
-  imports: [IonInput, IonText, IonItem, IonList, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
+  imports: [IonText, IonButton, IonButtons, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
 export class CreateUserPage{
   private modalController = inject(ModalController);
@@ -18,6 +20,10 @@ export class CreateUserPage{
 
   saving = signal(false);
   errorMsg = signal('');
+
+  constructor() {
+    addIcons({ personOutline, atOutline, keyOutline, alertCircleOutline });
+  }
 
   form = this.fb.nonNullable.group({
     name: ['', Validators.required],

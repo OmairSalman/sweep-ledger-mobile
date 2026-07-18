@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonBackButton, IonButtons, IonSpinner, IonText, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonList, IonIcon, IonItem, IonLabel, IonListHeader, IonFabButton, IonFab, IonItemSliding, IonItemOption, IonItemOptions, AlertController, ToastController } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonBackButton, IonButtons, IonSpinner, IonText, IonList, IonIcon, IonItem, IonLabel, IonListHeader, IonFabButton, IonFab, IonItemSliding, IonItemOption, IonItemOptions, AlertController, ToastController } from '@ionic/angular/standalone';
 import { inject } from '@angular/core';
 import { SweepsStore } from 'src/app/services/sweeps-store';
 import { AssetsStore } from 'src/app/services/assets-store';
@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Sweep } from 'src/models/sweep';
 import { forkJoin } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { personOutline, calendarOutline, cubeOutline, scanOutline, barcodeOutline } from 'ionicons/icons';
+import { scanOutline, barcodeOutline, businessOutline, alertCircleOutline, personOutline, calendarOutline, cubeOutline } from 'ionicons/icons';
 import { Asset } from 'src/models/asset';
 
 @Component({
@@ -17,7 +17,7 @@ import { Asset } from 'src/models/asset';
   templateUrl: './sweep-detail.page.html',
   styleUrls: ['./sweep-detail.page.scss'],
   standalone: true,
-  imports: [IonItemOptions, IonItemOption, IonFab, IonFabButton, IonListHeader, IonLabel, IonItem, IonIcon, IonCardTitle, IonCardSubtitle, IonCardHeader, IonCard, IonText, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner, IonCardContent, IonList, IonItemSliding]
+  imports: [IonItemOptions, IonItemOption, IonFab, IonFabButton, IonListHeader, IonLabel, IonItem, IonIcon, IonText, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner, IonList, IonItemSliding]
 })
 export class SweepDetailPage implements ViewWillEnter {
   private sweepsStore = inject(SweepsStore);
@@ -33,7 +33,7 @@ export class SweepDetailPage implements ViewWillEnter {
   sweep = signal<Sweep | null>(null);
 
   constructor(){
-    addIcons({personOutline,calendarOutline,cubeOutline,scanOutline,barcodeOutline});
+    addIcons({ scanOutline, barcodeOutline, businessOutline, alertCircleOutline, personOutline, calendarOutline, cubeOutline });
   }
 
   ionViewWillEnter()
@@ -71,6 +71,9 @@ export class SweepDetailPage implements ViewWillEnter {
 
   continueScanning()
   {
+    // A plain push, so this sweep stays under the scanner in the stack and
+    // backing out of the scanner returns here. sweep-scan's done() then pops
+    // back onto it rather than stacking a second copy.
     this.router.navigate(['/tabs/sweeps', this.sweepId, 'scan']);
   }
 

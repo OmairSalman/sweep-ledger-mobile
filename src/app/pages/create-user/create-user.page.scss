@@ -1,0 +1,39 @@
+// Create-user modal — PAU design system.
+// Same structure as the create-sweep modal: Cancel in the toolbar, a full-width
+// .pau-cta below the fields. Fields use the shared .pau-field pattern and the
+// error uses .pau-notice, both in global.scss.
+
+ion-content {
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-6);
+  --padding-bottom: var(--pau-space-6);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
+}
+
+.modal-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pau-space-4);
+  max-inline-size: 420px;
+  margin-inline: auto;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pau-space-4);
+}
+
+// Sentence case, never ALL-CAPS, per the design system.
+ion-toolbar ion-button {
+  --color: var(--ion-toolbar-color);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-semibold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
+}
+
+.pau-cta {
+  margin-block-start: var(--pau-space-2);
+}

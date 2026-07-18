@@ -1,7 +1,33 @@
-// ============================================
-// The overlay
-// ============================================
+// Sweep scan — PAU design system.
+//
+// ⚠ DO NOT set `ion-content { --background: ... }` in this file. The scanner
+// works by making the whole webview transparent so the native camera shows
+// through: global.scss's `body.scanner-active` sets --background and
+// --ion-background-color to transparent, and ion-content inherits that. A
+// page-scoped rule on ion-content is a more specific match and would win,
+// painting over the camera feed. When not scanning, ion-content already picks
+// up --ion-background-color (#f2f3f5) from the theme, so nothing is needed.
+//
+// ⚠ The visibility mechanism (body.scanner-active / .scanner-ui) lives in
+// global.scss and is untouched here.
+//
+// PALETTE INDEPENDENCE: the overlay floats over a live camera image, not over
+// the app's surface, so it deliberately does NOT follow light/dark. Pinned
+// values below are the light-palette PAU brand colours. This matters: Ionic's
+// color="light" resolves to #1e1e20 in dark mode, which is 1.11:1 against a
+// dim room — invisible exactly where assets get scanned.
+
 .scanner-ui {
+  // Pinned copies of the light palette — see PALETTE INDEPENDENCE above.
+  --scan-amber: #f5b912;       // --ion-color-warning (light)
+  --scan-amber-ink: #000000;   // --ion-color-warning-contrast — 11.83:1
+  --scan-red: #c62828;         // --ion-color-danger (light) — 5.62:1 w/ white
+  --scan-red-ink: #ffffff;
+  --scan-gold: #bd8b15;        // --ion-color-secondary (light)
+  --scan-surface: #ffffff;
+  --scan-ink: #670e0a;         // --pau-maroon (light)
+  --scan-scrim: rgba(0, 0, 0, 0.7);
+
   position: absolute;
   inset: 0;
   display: flex;
@@ -9,74 +35,98 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
-  padding: 24px;
+  padding: var(--pau-space-6);
 }
 
 // --- Top: count + last scanned ---
 .scan-status {
   position: absolute;
-  top: calc(env(safe-area-inset-top) + 16px);   // clear the notch
-  left: 0;
-  right: 0;
+  inset-block-start: calc(env(safe-area-inset-top) + var(--pau-space-4));
+  inset-inline: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: var(--pau-space-2);
 }
 
 .scan-count {
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--scan-scrim);
   color: #fff;
-  padding: 8px 20px;
-  border-radius: 999px;          // pill
-  font-size: 18px;
-  font-weight: 600;
+  padding: var(--pau-space-2) var(--pau-space-5);
+  border-radius: var(--pau-radius-pill);
+  font-size: var(--pau-text-md);
+  font-weight: var(--pau-weight-semibold);
 }
 
 .last-scanned {
   background: rgba(0, 0, 0, 0.55);
-  color: rgba(255, 255, 255, 0.9);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-family: monospace;         // barcodes read better in mono
-  max-width: 80%;
+  color: rgba(255, 255, 255, 0.92);
+  padding: var(--pau-space-1) var(--pau-space-4);
+  border-radius: var(--pau-radius-pill);
+  font-size: var(--pau-text-sm);
+  font-family: var(--pau-font-mono); // DS: mono for asset codes / barcodes
+  max-inline-size: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 // --- Center: the reticle ---
+// The 9999px spread dims everything outside the box. Kept as-is: it matches
+// the design system's own .sl-scan-frame technique.
 .reticle {
-  width: 300px;
-  height: 160px;                  // wide rectangle — barcodes are wide
-  max-width: 85%;
+  position: relative;
+  overflow: hidden; // clips the sweep line, not the vignette (own box-shadow)
+  inline-size: 300px;
+  block-size: 160px; // wide rectangle — barcodes are wide
+  max-inline-size: 85%;
   border: 3px solid rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);   // dims everything outside the box
+  border-radius: var(--pau-radius-tile);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+}
+
+// Gold sweep line, per ui_kits/sweep_ledger `.sl-scan-line` — signals that
+// scanning is live. Decorative, so the glow carries it over any scene.
+.reticle::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--pau-space-2);
+  block-size: 3px;
+  border-radius: 2px;
+  background: var(--scan-gold);
+  box-shadow: 0 0 12px var(--scan-gold);
+  animation: scan-sweep 2s var(--pau-ease) infinite;
+}
+
+@keyframes scan-sweep {
+  0%, 100% { inset-block-start: 10px; }
+  50%      { inset-block-start: calc(100% - 13px); }
 }
 
 // --- Warning area (below the reticle) ---
 .warning {
   position: absolute;
-  bottom: 140px;                  // above the Done button
-  left: 24px;
-  right: 24px;
+  inset-block-end: 140px; // above the Done button
+  inset-inline: var(--pau-space-6);
   text-align: center;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  animation: warning-in 150ms ease-out;
+  padding: var(--pau-space-3) var(--pau-space-4);
+  border-radius: var(--pau-radius-md);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  animation: warning-in var(--pau-dur-fast) var(--pau-ease-out);
 }
 
+// The design system's headline rule: dark text on amber. White on this amber
+// is 1.78:1 — the previous white-on-orange was already failing at 2.20:1.
 .warning-duplicate {
-  background: rgba(255, 149, 0, 0.95);    // amber
+  background: var(--scan-amber);
+  color: var(--scan-amber-ink);
 }
 
 .warning-error {
-  background: rgba(235, 68, 90, 0.95);    // red
+  background: var(--scan-red);
+  color: var(--scan-red-ink);
 }
 
 @keyframes warning-in {
@@ -85,29 +135,35 @@
 }
 
 // --- Bottom: Done ---
+// White reads against dark scenes but is 1.00:1 on a bright wall, so the drop
+// shadow does the separating rather than the fill.
 .done-button {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 24px);
-  left: 24px;
-  right: 24px;
+  inset-block-end: calc(env(safe-area-inset-bottom) + var(--pau-space-6));
+  inset-inline: var(--pau-space-6);
+  block-size: 56px;
+  --border-radius: var(--pau-radius-lg);
+  --background: var(--scan-surface);
+  --background-activated: #e8e8ea;
+  --background-focused: #e8e8ea;
+  --color: var(--scan-ink);
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
 }
 
+// Non-scanning states use the shared .pau-state / .pau-state__actions patterns
+// in global.scss.
 
-// ============================================
-// Non-scanning states (app UI visible, normal page)
-// ============================================
-.center-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 80%;
-  gap: 16px;
-  padding: 24px;
-}
+@media (prefers-reduced-motion: reduce) {
+  .reticle::after {
+    animation: none;
+    inset-block-start: calc(50% - 2px);
+  }
 
-.big-icon {
-  font-size: 64px;
-  color: var(--ion-color-medium);
+  .warning {
+    animation: none;
+  }
 }

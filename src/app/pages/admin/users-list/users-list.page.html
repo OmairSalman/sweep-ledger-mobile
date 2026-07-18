@@ -10,14 +10,19 @@
 <ion-content [fullscreen]="true">
   @if(loading())
   {
-    <div class="center-state">
+    <div class="pau-state">
       <ion-spinner name="circular"></ion-spinner>
     </div>
   }
   @else if(errorMsg())
   {
-    <div class="center-state">
-      <ion-text color="danger">{{ errorMsg() }}</ion-text>
+    <div class="pau-state" role="alert">
+      <div class="pau-state__icon pau-state__icon--danger">
+        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="pau-state__text">
+        <ion-text color="danger" class="pau-state__title">{{ errorMsg() }}</ion-text>
+      </div>
     </div>
   }
   @else
@@ -25,7 +30,10 @@
     <ion-list>
       @for(user of usersStore.users(); track user.id)
       {
-        <ion-item>
+        <ion-item class="user-row" lines="none">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+          </div>
           <ion-label>
             <h2>{{ user.name }}</h2>
             <p>{{ user.username }}</p>

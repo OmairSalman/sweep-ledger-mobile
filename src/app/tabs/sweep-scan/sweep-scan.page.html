@@ -28,8 +28,10 @@
         </div>
       }
 
-      <!-- Done -->
-      <ion-button class="done-button" (click)="done()" color="light" expand="block">
+      <!-- Done. Deliberately no color="light": that resolves to #1e1e20 in
+           dark mode, which is invisible against a dim room. The overlay pins
+           its own palette-independent colours instead. -->
+      <ion-button class="done-button" (click)="done()" expand="block">
         Done
       </ion-button>
 
@@ -37,20 +39,26 @@
   }
 
   @else if (permissionDenied()) {
-    <div class="center-state">
-      <ion-icon name="camera-outline" class="big-icon"></ion-icon>
-      <ion-text>
-        <h2>Camera permission needed</h2>
-        <p>Sweep Ledger needs camera access to scan barcodes.</p>
-      </ion-text>
-      <ion-button (click)="startScanning()">Try again</ion-button>
-      <ion-button fill="clear" (click)="done()">Back to sweep</ion-button>
+    <div class="pau-state">
+      <div class="pau-state__icon">
+        <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="pau-state__text">
+        <ion-text>
+          <h2 class="pau-state__title">Camera permission needed</h2>
+          <p class="pau-state__body">Sweep Ledger needs camera access to scan barcodes.</p>
+        </ion-text>
+      </div>
+      <div class="pau-state__actions">
+        <ion-button class="pau-cta" expand="block" (click)="startScanning()">Try again</ion-button>
+        <ion-button fill="clear" (click)="done()">Back to sweep</ion-button>
+      </div>
     </div>
   }
 
   @else {
     <!-- Scanner not running and not a permission problem — transient/error fallback -->
-    <div class="center-state">
+    <div class="pau-state">
       <ion-spinner name="circular"></ion-spinner>
     </div>
   }

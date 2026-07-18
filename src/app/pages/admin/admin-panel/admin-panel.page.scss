@@ -1,0 +1,51 @@
+// Admin hub — PAU design system.
+// The three entries are the design system's ListItem pattern: leading icon
+// tile, label, trailing chevron. Grouped in one card with hairline separators
+// rather than as separate cards — these are menu options belonging to one
+// group, not independent entities like the sweeps list rows.
+// Logical properties throughout for RTL-readiness.
+
+ion-content {
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-4);
+  --padding-bottom: var(--pau-space-8);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
+}
+
+.admin-shell {
+  max-inline-size: 480px;
+  margin-inline: auto;
+}
+
+.admin-menu {
+  padding: 0;
+  border-radius: var(--pau-radius-lg);
+  overflow: hidden;
+  background: var(--ion-item-background);
+  box-shadow: var(--pau-shadow-sm);
+
+  ion-item {
+    --background: var(--ion-item-background);
+    --min-height: 72px;
+    --padding-start: var(--pau-space-4);
+    --inner-padding-end: var(--pau-space-4);
+    --border-color: var(--pau-hairline);
+    --detail-icon-color: var(--pau-ink-muted);
+    --detail-icon-opacity: 1;
+  }
+
+  // The group is closed by the card's own edge, so the last row needs no rule.
+  ion-item:last-of-type {
+    --border-width: 0;
+  }
+
+  .pau-tile {
+    margin-inline-end: var(--pau-space-4);
+  }
+
+  ion-label {
+    font-size: var(--pau-text-base);
+    font-weight: var(--pau-weight-semibold);
+  }
+}

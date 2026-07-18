@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonSpinner, IonList, IonItem, IonTextarea, IonText, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonSpinner, IonText, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { pricetagOutline, chatboxEllipsesOutline, alertCircleOutline } from 'ionicons/icons';
 import { Push } from 'src/app/services/push';
 
 @Component({
@@ -9,7 +11,7 @@ import { Push } from 'src/app/services/push';
   templateUrl: './notification-form.page.html',
   styleUrls: ['./notification-form.page.scss'],
   standalone: true,
-  imports: [IonText, IonItem, IonList, IonSpinner, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, IonTextarea, IonInput]
+  imports: [IonText, IonIcon, IonSpinner, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
 export class NotificationFormPage {
   private modalController = inject(ModalController);
@@ -18,6 +20,10 @@ export class NotificationFormPage {
 
   saving = signal(false);
   errorMsg = signal('');
+
+  constructor() {
+    addIcons({ pricetagOutline, chatboxEllipsesOutline, alertCircleOutline });
+  }
 
   form = this.fb.nonNullable.group({
     title: ['', Validators.required],

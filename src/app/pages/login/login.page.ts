@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonContent, IonInput, IonSpinner, IonText, IonIcon, ViewWillEnter } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonSpinner, IonText, IonIcon, ViewWillEnter } from '@ionic/angular/standalone';
 import { AuthStore } from 'src/app/services/auth-store';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { addIcons } from 'ionicons';
-import { fingerPrintOutline } from 'ionicons/icons';
+import { fingerPrintOutline, alertCircleOutline, personOutline, lockClosedOutline, logInOutline, cubeOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { Biometrics } from 'src/app/services/biometrics';
 import { BiometryError, BiometryErrorType } from '@aparajita/capacitor-biometric-auth';
 
@@ -15,7 +15,7 @@ import { BiometryError, BiometryErrorType } from '@aparajita/capacitor-biometric
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonContent, CommonModule, FormsModule, IonInput, IonButton, IonText, IonSpinner]
+  imports: [IonIcon, IonContent, CommonModule, FormsModule, IonButton, IonText, IonSpinner]
 })
 export class LoginPage implements ViewWillEnter {
   authStore = inject(AuthStore);
@@ -23,16 +23,22 @@ export class LoginPage implements ViewWillEnter {
   private biometrics = inject(Biometrics);
 
   loading = signal(false);
+  showPassword = signal(false);
   username = '';
   password = '';
 
   constructor() {
-    addIcons({ fingerPrintOutline });
+    addIcons({ fingerPrintOutline, alertCircleOutline, personOutline, lockClosedOutline, logInOutline, cubeOutline, eyeOutline, eyeOffOutline });
   }
 
   ionViewWillEnter()
   {
     this.authStore.authError.set('');
+  }
+
+  toggleShowPassword()
+  {
+    this.showPassword.update((shown) => !shown);
   }
 
   onLogin()

@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, AlertController, ToastController, IonSpinner, IonText, IonList, IonLabel, IonItem, IonBadge, IonButton, ViewWillEnter, ModalController } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, AlertController, ToastController, IonSpinner, IonText, IonList, IonLabel, IonItem, IonBadge, IonButton, IonIcon, ViewWillEnter, ModalController } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { personOutline, alertCircleOutline } from 'ionicons/icons';
 import { UsersStore } from 'src/app/services/users-store';
 import { User } from 'src/models/user';
 
@@ -10,7 +12,7 @@ import { User } from 'src/models/user';
   templateUrl: './users-list.page.html',
   styleUrls: ['./users-list.page.scss'],
   standalone: true,
-  imports: [IonButton, IonBadge, IonItem, IonLabel, IonList, IonText, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner]
+  imports: [IonButton, IonBadge, IonItem, IonLabel, IonList, IonText, IonIcon, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner]
 })
 export class UsersListPage implements ViewWillEnter {
   usersStore = inject(UsersStore);
@@ -19,6 +21,10 @@ export class UsersListPage implements ViewWillEnter {
 
   loading = signal(false);
   errorMsg = signal('');
+
+  constructor() {
+    addIcons({ personOutline, alertCircleOutline });
+  }
 
   private async showToast(message: string, css: string)
   {

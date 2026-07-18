@@ -1,62 +1,72 @@
+// Sweeps list — PAU design system.
+// Each sweep is its own white card on the flat field, separated by shadow and
+// background rather than borders. Empty/loading/error use the shared .pau-state
+// pattern in global.scss; the leading glyph uses the shared .pau-tile.
+// Logical properties throughout for RTL-readiness.
+
 ion-content {
-  --padding-top: 16px;
-  --padding-bottom: 16px;
-  --padding-start: 16px;
-  --padding-end: 16px;
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-4);
+  --padding-bottom: var(--pau-space-12); // clears the FAB
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
 }
 
 ion-list {
   background: transparent;
+  padding: 0;
 }
 
-ion-item {
-  --background: var(--ion-background-color-step-100);
-  --border-radius: 10px;
-  margin-bottom: 10px;
-  --padding-start: 14px;
-  --inner-padding-end: 14px;
+/* ---- Row: a card, with the swipe action clipped to its radius ---- */
+.sweep-row {
+  display: block;
+  margin-block-end: var(--pau-card-gap);
+  border-radius: var(--pau-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--pau-shadow-sm);
+
+  ion-item {
+    --background: var(--ion-item-background);
+    --border-width: 0;
+    --min-height: 76px;
+    --padding-start: var(--pau-space-4);
+    --inner-padding-end: var(--pau-space-4);
+    --padding-top: var(--pau-space-3);
+    --padding-bottom: var(--pau-space-3);
+    --detail-icon-color: var(--pau-ink-muted);
+    --detail-icon-opacity: 1;
+  }
+
+  .pau-tile {
+    margin-inline-end: var(--pau-space-4);
+  }
 
   h2 {
-    font-weight: 600;
+    margin: 0;
+    font-size: var(--pau-text-md);
+    font-weight: var(--pau-weight-bold);
+    line-height: var(--pau-leading-snug);
     word-break: break-all;
   }
 
   p {
-    color: var(--ion-color-medium);
+    margin: 2px 0 0;
+    font-size: var(--pau-text-sm);
+    color: var(--pau-ink-muted);
+    line-height: var(--pau-leading-snug);
+  }
+
+  // The timestamp is the least important line in the row.
+  .sweep-row__date {
+    font-size: var(--pau-text-xs);
   }
 }
 
-// spinner sits centered in the page while loading
-ion-spinner {
-  display: block;
-  margin: 40% auto 0;
-  width: 36px;
-  height: 36px;
-}
-
-// error message: centered, red, set apart
-.error-state {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  margin-top: 40%;
-  color: var(--ion-color-danger);
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 70%;
-  gap: 8px;
-}
-
 ion-item-option {
-  font-weight: 600;
-  --padding-start: 20px;
-  --padding-end: 20px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-bold);
+  --padding-start: var(--pau-space-5);
+  --padding-end: var(--pau-space-5);
 }
+
+// The FAB and the loading spinner are styled globally (global.scss).

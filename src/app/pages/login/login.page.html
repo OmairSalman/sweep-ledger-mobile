@@ -1,45 +1,87 @@
 <ion-content [fullscreen]="true">
-  <ion-text color="primary">
-    <h1>Login to Sweep Ledger</h1>
-  </ion-text>
+  <div class="login-shell">
 
-  <div style="padding: 10px;">
+    <div class="login-brand">
+      <!--
+        Brand slot. Placeholder glyph until a logo is approved for this app —
+        swap this ion-icon for <img src="assets/<logo>.png" alt="..."> and the
+        surrounding tile keeps working as-is.
+      -->
+      <div class="brand-card">
+        <ion-icon name="cube-outline" class="brand-placeholder" aria-hidden="true"></ion-icon>
+      </div>
+      <ion-text>
+        <h1>Login to Sweep Ledger</h1>
+      </ion-text>
+    </div>
+
     <form id="login-form" (ngSubmit)="onLogin()">
-      <ion-input
-        label="Username"
-        labelPlacement="floating"
-        type="text"
-        name="username"
-        [(ngModel)]="username">
-      </ion-input>
-      <ion-input
-        label="Password"
-        labelPlacement="floating"
-        type="password"
-        name="password"
-        [(ngModel)]="password">
-      </ion-input>
+      <div class="pau-field">
+        <ion-icon name="person-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          name="username"
+          placeholder="Username"
+          aria-label="Username"
+          autocomplete="username"
+          [(ngModel)]="username" />
+      </div>
+
+      <div class="pau-field">
+        <ion-icon name="lock-closed-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          [type]="showPassword() ? 'text' : 'password'"
+          name="password"
+          placeholder="Password"
+          aria-label="Password"
+          autocomplete="current-password"
+          [(ngModel)]="password" />
+        <button
+          type="button"
+          class="field-action"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          [attr.aria-pressed]="showPassword()"
+          (click)="toggleShowPassword()">
+          <ion-icon [name]="showPassword() ? 'eye-off-outline' : 'eye-outline'" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+
       @if (authStore.authError()) {
-        <ion-text color="danger">
-          <p class="error-text">{{ authStore.authError() }}</p>
-        </ion-text>
+        <div class="pau-notice pau-notice--error" role="alert">
+          <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+          <ion-text color="danger">
+            <p class="error-text">{{ authStore.authError() }}</p>
+          </ion-text>
+        </div>
       }
+
       <div class="login-actions">
-        <ion-button type="submit" [disabled]="loading()">
+        <ion-button class="pau-cta" type="submit" [disabled]="loading()">
           @if (loading())
           {
-            <ion-spinner name="circular" style="margin-right: 5px;"></ion-spinner>
+            <ion-spinner name="circular"></ion-spinner>
             <ion-text>Logging in...</ion-text>
           }
-          @else { Login }
+          @else
+          {
+            <ion-icon slot="start" name="log-in-outline" aria-hidden="true"></ion-icon>
+            Login
+          }
         </ion-button>
         @if(authStore.biometricDeclined())
         {
-          <ion-button type="button" class="biometric-btn" (click)="onBiometricRetry()">
-            <ion-icon name="finger-print-outline"></ion-icon>
+          <ion-button
+            type="button"
+            class="pau-cta biometric-btn"
+            aria-label="Log in with fingerprint"
+            (click)="onBiometricRetry()">
+            <ion-icon name="finger-print-outline" slot="icon-only"></ion-icon>
           </ion-button>
         }
       </div>
     </form>
+
   </div>
 </ion-content>

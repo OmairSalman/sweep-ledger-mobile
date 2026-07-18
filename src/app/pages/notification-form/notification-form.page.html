@@ -4,38 +4,50 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button [strong]="true" (click)="submit()" [disabled]="form.invalid || saving()">
-        @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
-        @else { Send }
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form">
-    <ion-list>
-      <ion-item>
-        <ion-input
-          label="Title"
-          labelPlacement="floating"
-          formControlName="title">
-        </ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-textarea
-          label="Body"
-          labelPlacement="floating"
-          formControlName="body">
-        </ion-textarea>
-      </ion-item>
-    </ion-list>
-  </form>
+  <div class="modal-shell">
+    <form [formGroup]="form" class="modal-form">
+      <div class="pau-field">
+        <ion-icon name="pricetag-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          formControlName="title"
+          placeholder="Title"
+          aria-label="Title" />
+      </div>
 
-  @if (errorMsg()) {
-    <ion-text color="danger">
-      <p class="error-text">{{ errorMsg() }}</p>
-    </ion-text>
-  }
+      <div class="pau-field pau-field--multiline">
+        <ion-icon name="chatbox-ellipses-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <textarea
+          class="field-input"
+          rows="4"
+          formControlName="body"
+          placeholder="Message"
+          aria-label="Message"></textarea>
+      </div>
+    </form>
+
+    @if (errorMsg()) {
+      <div class="pau-notice pau-notice--error" role="alert">
+        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+        <ion-text color="danger">
+          <p class="error-text">{{ errorMsg() }}</p>
+        </ion-text>
+      </div>
+    }
+
+    <ion-button
+      class="pau-cta"
+      expand="block"
+      [strong]="true"
+      (click)="submit()"
+      [disabled]="form.invalid || saving()">
+      @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
+      @else { Send notification }
+    </ion-button>
+  </div>
 </ion-content>
