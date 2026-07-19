@@ -98,7 +98,8 @@
 
     <!-- Account actions -->
     <div class="profile-actions">
-      @if (authStore.currentUser()?.role === 'Admin') {
+      @if (authStore.can('admin','read'))
+      {
         <ion-button expand="block" fill="outline" routerLink="/admin">
           <ion-icon slot="start" name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
           Admin Panel

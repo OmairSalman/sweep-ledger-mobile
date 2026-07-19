@@ -25,13 +25,4 @@ export class UsersStore {
       tap(() => this.loadUsers().subscribe())
     )
   }
-
-  promoteUser(userId: number): Observable<User>
-  {
-    return this.api.post<User>(`/users/${userId}/promote`, {}).pipe(
-      tap((updated) => this.users.update(users =>
-        users.map(u => u.id === updated.id ? updated : u)
-      ))
-    );
-  }
 }

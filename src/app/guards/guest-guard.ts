@@ -13,7 +13,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
   {
     if(authStore.currentUser())
     {
-      router.navigate(['/home']);
+      router.navigate(['/tabs']);
       return false;
     }
     else
@@ -27,7 +27,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
     {
       if(user)
       {
-        router.navigate(['/home']);
+        router.navigate(['/tabs']);
         return false;
       }
       else

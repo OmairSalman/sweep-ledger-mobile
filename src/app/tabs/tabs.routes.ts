@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { permissionGuard } from '../guards/permission-guard';
 
 export const routes: Routes = [
     {
@@ -11,15 +12,21 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        loadComponent: () => import('./sweeps-list/sweeps-list.page').then(m => m.SweepsListPage)
+                        loadComponent: () => import('./sweeps-list/sweeps-list.page').then(m => m.SweepsListPage),
+                        canActivate: [permissionGuard],
+                        data: { page: 'sweeps' }
                     },
                     {
                         path: ':id',
-                        loadComponent: () => import('./sweep-detail/sweep-detail.page').then(m => m.SweepDetailPage)
+                        loadComponent: () => import('./sweep-detail/sweep-detail.page').then(m => m.SweepDetailPage),
+                        canActivate: [permissionGuard],
+                        data: { page: 'assets' }
                     },
                     {
                         path: ':id/scan',
-                        loadComponent: () => import('./sweep-scan/sweep-scan.page').then(m => m.SweepScanPage)
+                        loadComponent: () => import('./sweep-scan/sweep-scan.page').then(m => m.SweepScanPage),
+                        canActivate: [permissionGuard],
+                        data: { page: 'assets' }
                     }
                 ]
             },

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonItemOption, IonItemOptions, IonLabel, IonItem, IonItemSliding, IonList, IonText, IonSpinner, AlertController, ToastController, ViewWillEnter, IonIcon, IonFabButton, IonFab, ModalController, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonItemOption, IonItemOptions, IonLabel, IonItem, IonItemSliding, IonList, IonText, IonSpinner, AlertController, ToastController, ViewWillEnter, IonIcon, IonFabButton, IonFab, ModalController } from '@ionic/angular/standalone';
 import { SweepsStore } from 'src/app/services/sweeps-store';
 import { Sweep } from 'src/models/sweep';
 import { addIcons } from 'ionicons';
@@ -8,16 +8,18 @@ import { add, businessOutline, cubeOutline, alertCircleOutline } from 'ionicons/
 import { RouterLink } from '@angular/router';
 import { NavController } from '@ionic/angular/standalone';
 import { CreateSweepPage } from 'src/app/pages/create-sweep/create-sweep.page';
+import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
   selector: 'app-sweeps-list',
   templateUrl: './sweeps-list.page.html',
   styleUrls: ['./sweeps-list.page.scss'],
   standalone: true,
-  imports: [RouterLink ,IonFab, IonFabButton, IonIcon, IonSpinner, IonText, IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule]
+  imports: [RouterLink, IonFab, IonFabButton, IonIcon, IonSpinner, IonText, IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule]
 })
 export class SweepsListPage implements ViewWillEnter {
   sweepsStore = inject(SweepsStore);
+  authStore = inject(AuthStore);
   private toastController = inject(ToastController);
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);

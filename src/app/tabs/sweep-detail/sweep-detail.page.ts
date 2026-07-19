@@ -11,6 +11,7 @@ import { forkJoin } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { scanOutline, barcodeOutline, businessOutline, alertCircleOutline, personOutline, calendarOutline, cubeOutline } from 'ionicons/icons';
 import { Asset } from 'src/models/asset';
+import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
   selector: 'app-sweep-detail',
@@ -25,6 +26,7 @@ export class SweepDetailPage implements ViewWillEnter {
   private router = inject(Router);
   private alertController = inject(AlertController);
   private toastController = inject(ToastController);
+  authStore = inject(AuthStore);
   assetsStore = inject(AssetsStore);
   sweepId = Number(this.route.snapshot.paramMap.get('id'));
 

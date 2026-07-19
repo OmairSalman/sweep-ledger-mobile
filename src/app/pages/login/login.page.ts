@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonContent, IonSpinner, IonText, IonIcon, ViewWillEnter } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonSpinner, IonText, IonIcon } from '@ionic/angular/standalone';
 import { AuthStore } from 'src/app/services/auth-store';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,7 +17,7 @@ import { BiometryError, BiometryErrorType } from '@aparajita/capacitor-biometric
   standalone: true,
   imports: [IonIcon, IonContent, CommonModule, FormsModule, IonButton, IonText, IonSpinner]
 })
-export class LoginPage implements ViewWillEnter {
+export class LoginPage {
   authStore = inject(AuthStore);
   private router = inject(Router);
   private biometrics = inject(Biometrics);
@@ -29,11 +29,6 @@ export class LoginPage implements ViewWillEnter {
 
   constructor() {
     addIcons({ fingerPrintOutline, alertCircleOutline, personOutline, lockClosedOutline, logInOutline, cubeOutline, eyeOutline, eyeOffOutline });
-  }
-
-  ionViewWillEnter()
-  {
-    this.authStore.authError.set('');
   }
 
   toggleShowPassword()
@@ -58,8 +53,10 @@ export class LoginPage implements ViewWillEnter {
         this.username = '';
         this.password = '';
         this.loading.set(false);
+        this.authStore.authError.set('');
       },
-      error:(err: HttpErrorResponse) => {
+      error:(err: HttpErrorResponse) =>
+      {
         this.authStore.authError.set(err.error ?? 'Login failed');
         this.loading.set(false);
       }

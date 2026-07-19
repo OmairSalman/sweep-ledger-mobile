@@ -7,6 +7,7 @@ import { peopleOutline, personAddOutline, notificationsOutline } from 'ionicons/
 import { RouterLink } from '@angular/router';
 import { CreateUserPage } from '../../create-user/create-user.page';
 import { NotificationFormPage } from '../../notification-form/notification-form.page';
+import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
   selector: 'app-admin-panel',
@@ -18,6 +19,7 @@ import { NotificationFormPage } from '../../notification-form/notification-form.
 export class AdminPanelPage {
   private modalController = inject(ModalController);
   private toastController = inject(ToastController);
+  authStore = inject(AuthStore);
   
   constructor() {
     addIcons({peopleOutline,personAddOutline,notificationsOutline});

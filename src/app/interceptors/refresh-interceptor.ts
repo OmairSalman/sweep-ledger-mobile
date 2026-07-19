@@ -16,8 +16,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
       if(
         error.status !== 401 ||
         req.url.includes('/auth/refresh') ||
-        req.url.includes('/auth/login') ||
-        req.url.includes('/auth/register'))
+        req.url.includes('/auth/login'))
         return throwError(() => error);
       
       if(!tokenRefresh.isRefreshing)

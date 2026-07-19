@@ -10,6 +10,7 @@ import { BarcodeFormat, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
+import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
   selector: 'app-sweep-scan',
@@ -21,6 +22,7 @@ import { cameraOutline } from 'ionicons/icons';
 export class SweepScanPage implements ViewWillEnter, ViewWillLeave {
   private route = inject(ActivatedRoute);
   private navController = inject(NavController);
+  private authStore = inject(AuthStore);
   assetsStore = inject(AssetsStore);
   sweepId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -41,8 +43,12 @@ export class SweepScanPage implements ViewWillEnter, ViewWillLeave {
 
   ionViewWillEnter(): void
   {
-    this.assetsStore.loadAssets(this.sweepId).subscribe();
-    this.startScanning();
+    if(!this.authStore.can('assets', 'write')) this.navController.navigateBack(['/tabs/sweeps', this.sweepId])
+    else
+    {
+      this.assetsStore.loadAssets(this.sweepId).subscribe();
+      this.startScanning();
+    }
   }
 
   ionViewWillLeave(): void

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
 import { adminGuard } from './guards/admin-guard';
+import { permissionGuard } from './guards/permission-guard';
 
 export const routes: Routes = [
   {
@@ -25,20 +26,16 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/admin/admin-panel/admin-panel.page').then( m => m.AdminPanelPage)
+        loadComponent: () => import('./pages/admin/admin-panel/admin-panel.page').then( m => m.AdminPanelPage),
+        canActivate: [permissionGuard],
+        data: { page: 'admin' }
       },
       {
         path: 'users',
-        loadComponent: () => import('./pages/admin/users-list/users-list.page').then(m => m.UsersListPage)
+        loadComponent: () => import('./pages/admin/users-list/users-list.page').then(m => m.UsersListPage),
+        canActivate: [permissionGuard],
+        data: { page: 'users' }
       },
     ]
-  },
-  {
-    path: 'create-user',
-    loadComponent: () => import('./pages/create-user/create-user.page').then( m => m.CreateUserPage)
-  },
-  {
-    path: 'notification-form',
-    loadComponent: () => import('./pages/notification-form/notification-form.page').then( m => m.NotificationFormPage)
   }
 ];

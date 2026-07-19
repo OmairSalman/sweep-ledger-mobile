@@ -32,7 +32,7 @@ export class Push {
       const data = action.notification.data;
       switch(data.type)
       {
-        case 'new_scan':  this.router.navigate(['/tabs/tab1']); break;
+        case 'new_scan':  this.router.navigate(['/tabs']); break;
       }
     })
   }

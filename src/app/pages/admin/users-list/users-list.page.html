@@ -38,21 +38,6 @@
             <h2>{{ user.name }}</h2>
             <p>{{ user.username }}</p>
           </ion-label>
-
-          @if (user.role === 'Admin')
-          {
-            <ion-badge slot="end" color="primary">Admin</ion-badge>
-          }
-          @else
-          {
-            <ion-button
-              slot="end"
-              size="small"
-              fill="outline"
-              (click)="confirmPromote(user)">
-              Promote
-            </ion-button>
-          }
         </ion-item>
       }
     </ion-list>

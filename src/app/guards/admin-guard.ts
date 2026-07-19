@@ -11,5 +11,5 @@ export const adminGuard: CanActivateFn = async (route, state) => {
 
   if(authResult !== true) return authResult;
 
-  return authStore.currentUser()?.role === 'Admin' ? true : router.createUrlTree(['/home']);
+  return authStore.can('admin','read') ? true : router.createUrlTree(['/tabs']);
 };

@@ -10,26 +10,35 @@
 <ion-content [fullscreen]="true">
   <div class="admin-shell">
     <ion-list class="admin-menu">
-      <ion-item button detail routerLink="/admin/users" lines="full">
-        <div class="pau-tile" slot="start">
-          <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
-        </div>
-        <ion-label>Manage users</ion-label>
-      </ion-item>
+      @if(authStore.can('users','read'))
+      {
+        <ion-item button detail routerLink="/admin/users" lines="full">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-label>Manage users</ion-label>
+        </ion-item>
+      }
 
-      <ion-item button detail (click)="openCreateUser()" lines="full">
-        <div class="pau-tile" slot="start">
-          <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
-        </div>
-        <ion-label>Create user</ion-label>
-      </ion-item>
+      @if(authStore.can('users','write'))
+      {
+        <ion-item button detail (click)="openCreateUser()" lines="full">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-label>Create user</ion-label>
+        </ion-item>
+      }
 
-      <ion-item button detail (click)="openCreateNotification()" lines="full">
-        <div class="pau-tile" slot="start">
-          <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
-        </div>
-        <ion-label>Send a notification to users</ion-label>
-      </ion-item>
+      @if(authStore.can('notifications','write'))
+      {
+        <ion-item button detail (click)="openCreateNotification()" lines="full">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-label>Send a notification to users</ion-label>
+        </ion-item>
+      }
     </ion-list>
   </div>
 </ion-content>
