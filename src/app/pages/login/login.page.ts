@@ -47,9 +47,9 @@ export class LoginPage {
       return;
     }
     this.authStore.login(this.username, this.password).subscribe({
-      next:() =>
+      next:(outcome) =>
       {
-        this.router.navigate(['/tabs']);
+        this.router.navigate([outcome === 'established' ? '/tabs' : '/select-role']);
         this.username = '';
         this.password = '';
         this.loading.set(false);
@@ -57,7 +57,7 @@ export class LoginPage {
       },
       error:(err: HttpErrorResponse) =>
       {
-        this.authStore.authError.set(err.error ?? 'Login failed');
+        this.authStore.authError.set(typeof err?.error === 'string' ? err.error : 'Login failed');
         this.loading.set(false);
       }
     })
@@ -86,7 +86,7 @@ export class LoginPage {
           this.router.navigate(['/tabs']);
           this.authStore.biometricDeclined.set(false);
         }
-        else this.authStore.authError.set('Session expired, please log in');
+        else if (!this.authStore.authError()) this.authStore.authError.set('Session expired, please log in');
       }
     })
   }

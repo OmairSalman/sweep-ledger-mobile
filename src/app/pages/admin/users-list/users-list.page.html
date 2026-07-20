@@ -30,13 +30,21 @@
     <ion-list>
       @for(user of usersStore.users(); track user.id)
       {
-        <ion-item class="user-row" lines="none">
+        <ion-item class="user-row" lines="none" button (click)="openUserRoles(user)">
           <div class="pau-tile" slot="start">
             <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
           </div>
           <ion-label>
             <h2>{{ user.name }}</h2>
             <p>{{ user.username }}</p>
+            @if(user.roles.length > 0)
+            {
+              <p class="user-roles">{{ user.roles.join(', ') }}</p>
+            }
+            @else
+            {
+              <ion-badge color="warning">No role</ion-badge>
+            }
           </ion-label>
         </ion-item>
       }

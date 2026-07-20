@@ -5,7 +5,7 @@ import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastCont
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline } from 'ionicons/icons';
+import { personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline, swapHorizontalOutline } from 'ionicons/icons';
 import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
@@ -27,7 +27,7 @@ export class ProfilePage implements ViewWillEnter {
   changing = signal(false);
 
   constructor() {
-    addIcons({ personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline });
+    addIcons({personOutline,atOutline,swapHorizontalOutline,lockClosedOutline,keyOutline,alertCircleOutline,shieldCheckmarkOutline,logOutOutline});
   }
 
   private async showToast(message: string)
@@ -44,6 +44,7 @@ export class ProfilePage implements ViewWillEnter {
   ionViewWillEnter()
   {
     this.authStore.authError.set('');
+    this.authStore.ensureRolesLoaded();
   }
 
   onChangePassword()

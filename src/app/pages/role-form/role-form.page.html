@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ role ? 'Edit role' : 'New role' }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button [strong]="true" (click)="submit()" [disabled]="form.invalid || saving()">
+        @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
+        @else { {{ role ? 'Save' : 'Create' }} }
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-list>
+      <ion-item>
+        <ion-input label="Name" labelPlacement="floating" formControlName="name"></ion-input>
+      </ion-item>
+    </ion-list>
+  </form>
+
+  @if (errorMsg()) {
+    <ion-text color="danger">
+      <p class="error-text">{{ errorMsg() }}</p>
+    </ion-text>
+  }
+</ion-content>

@@ -3,6 +3,8 @@ import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
 import { adminGuard } from './guards/admin-guard';
 import { permissionGuard } from './guards/permission-guard';
+import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
+import { pickerGuard } from './guards/picker-guard';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,30 @@ export const routes: Routes = [
         canActivate: [permissionGuard],
         data: { page: 'users' }
       },
+      {
+        path: 'pages',
+        loadComponent: () => import('./pages/admin/pages-list/pages-list.page').then( m => m.PagesListPage),
+        canActivate: [permissionGuard],
+        data: { page: 'admin' }
+      },
+      {
+        path: 'roles',
+        loadComponent: () => import('./pages/admin/roles-list/roles-list.page').then( m => m.RolesListPage),
+        canActivate: [permissionGuard],
+        data: { page: 'admin' }
+      },
+      {
+        path: 'role/:id',
+        loadComponent: () => import('./pages/admin/role-detail/role-detail.page').then( m => m.RoleDetailPage),
+        canActivate: [permissionGuard],
+        canDeactivate: [unsavedChangesGuard],
+        data: { page: 'admin' }
+      }
     ]
+  },
+  {
+    path: 'select-role',
+    loadComponent: () => import('./pages/role-select/role-select.page').then( m => m.RoleSelectPage),
+    canActivate: [pickerGuard]
   }
 ];

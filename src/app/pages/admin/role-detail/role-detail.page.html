@@ -1,0 +1,71 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin/roles"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ role()?.name ?? 'Role' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [strong]="true" (click)="save()" [disabled]="!dirty() || saving()">
+        @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
+        @else {Save}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (loading()) {
+    <div class="center-state"><ion-spinner name="circular"></ion-spinner></div>
+  }
+  @else if (errorMsg()) {
+    <div class="center-state">
+      <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
+    </div>
+  }
+  @else {
+    @if (matrix().length === 0) {
+      <div class="center-state">
+        <p>This role has no pages yet. Add one to grant access.</p>
+      </div>
+    }
+    @else {
+      <ion-list>
+        @for (row of matrix(); track row.pageId) {
+          <ion-item button detail="false" (click)="toggleExpanded(row.pageId)">
+            <ion-label>
+              <h2>{{ row.pageName }}</h2>
+            </ion-label>
+            <ion-icon slot="end" [name]="row.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+          </ion-item>
+
+          @if (row.expanded) {
+            <div class="permission-toggles">
+              <ion-item lines="none">
+                <ion-toggle [checked]="row.isRead" (ionChange)="onToggle(row.pageId, 'isRead', $event)">Read</ion-toggle>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-toggle [checked]="row.isWrite" (ionChange)="onToggle(row.pageId, 'isWrite', $event)">Create</ion-toggle>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-toggle [checked]="row.isUpdate" (ionChange)="onToggle(row.pageId, 'isUpdate', $event)">Update</ion-toggle>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-toggle [checked]="row.isDelete" (ionChange)="onToggle(row.pageId, 'isDelete', $event)">Delete</ion-toggle>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-toggle [checked]="row.isPrint" (ionChange)="onToggle(row.pageId, 'isPrint', $event)">Print</ion-toggle>
+              </ion-item>
+            </div>
+          }
+        }
+      </ion-list>
+    }
+
+    @if (availablePages().length > 0) {
+      <ion-button expand="block" fill="outline" class="add-page-btn" (click)="openAddPage()">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Add page
+      </ion-button>
+    }
+  }
+</ion-content>

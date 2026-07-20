@@ -5,7 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonIcon, IonItem
 import { addIcons } from 'ionicons';
 import { peopleOutline, personAddOutline, notificationsOutline } from 'ionicons/icons';
 import { RouterLink } from '@angular/router';
-import { CreateUserPage } from '../../create-user/create-user.page';
+import { CreateUserModal } from '../../create-user/create-user.page';
 import { NotificationFormPage } from '../../notification-form/notification-form.page';
 import { AuthStore } from 'src/app/services/auth-store';
 
@@ -39,7 +39,7 @@ export class AdminPanelPage {
   async openCreateUser()
   {
     const modal = await this.modalController.create({
-      component: CreateUserPage
+      component: CreateUserModal
     })
     await modal.present();
     const { data, role } = await modal.onWillDismiss();

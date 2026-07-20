@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Roles</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openRoleForm(null)">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (loading()) {
+    <div class="center-state">
+      <ion-spinner name="circular"></ion-spinner>
+    </div>
+  }
+  @else if (errorMsg()) {
+    <div class="center-state">
+      <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
+    </div>
+  }
+  @else if (rolesStore.roles().length === 0) {
+    <div class="center-state">
+      <p>No roles defined yet.</p>
+    </div>
+  }
+  @else {
+    <ion-list>
+      @for (role of rolesStore.roles(); track role.id) {
+        <ion-item-sliding>
+          <ion-item button [routerLink]="['/admin/role', role.id]">
+            <ion-label>
+              <h2>{{ role.name }}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="confirmDelete(role)">
+              Delete
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      }
+    </ion-list>
+  }
+</ion-content>

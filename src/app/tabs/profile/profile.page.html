@@ -25,6 +25,21 @@
         </span>
         <span class="pau-kv__v">{{ authStore.currentUser()?.username }}</span>
       </div>
+      <div class="pau-kv">
+        <span class="pau-kv__k">
+          <ion-icon name="at-outline" aria-hidden="true"></ion-icon>
+          {{ authStore.availableRoles().length > 1 ? 'Active role' : 'Role' }}
+        </span>
+        @if (authStore.availableRoles().length > 1) {
+          <ion-button fill="clear" size="small" class="pau-kv__v" routerLink="/select-role">
+            {{ authStore.activeRole()?.name }}
+            <ion-icon slot="end" name="swap-horizontal-outline"></ion-icon>
+          </ion-button>
+        }
+        @else {
+          <span class="pau-kv__v">{{ authStore.activeRole()?.name }}</span>
+        }
+      </div>
     </div>
 
     <!-- Change password — the design system's SectionCard -->

@@ -30,6 +30,26 @@
         </ion-item>
       }
 
+      @if(authStore.can('admin', 'read'))
+      {
+        <ion-item button detail routerLink="/admin/pages" lines="full">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-label>Manage pages</ion-label>
+        </ion-item>
+      }
+
+      @if(authStore.can('admin', 'read'))
+      {
+        <ion-item button detail routerLink="/admin/roles" lines="full">
+          <div class="pau-tile" slot="start">
+            <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-label>Manage roles</ion-label>
+        </ion-item>
+      }
+
       @if(authStore.can('notifications','write'))
       {
         <ion-item button detail (click)="openCreateNotification()" lines="full">

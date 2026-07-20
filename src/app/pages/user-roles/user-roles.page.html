@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ user.name }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if(loading())
+  {
+    <div class="center-state">
+      <ion-spinner name="circular"></ion-spinner>
+    </div>
+  }
+  @else if(errorMsg())
+  {
+    <div class="center-state">
+      <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
+    </div>
+  }
+  @else
+  {
+    <ion-list>
+      @for(role of rolesStore.roles(); track role.id)
+      {
+        <ion-item lines="none">
+          <ion-toggle
+            [checked]="assignedIds().has(role.id)"
+            (ionChange)="onToggle(role, $event)">
+            {{ role.name }}
+          </ion-toggle>
+        </ion-item>
+      }
+      @if (rolesStore.roles().length === 0)
+      {
+        <div class="center-state">
+          <p>No roles defined yet. Create roles in the admin panel first.</p>
+        </div>
+      }
+    </ion-list>
+  }
+</ion-content>

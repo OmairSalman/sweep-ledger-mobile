@@ -13,7 +13,7 @@ import { UsersStore } from 'src/app/services/users-store';
   standalone: true,
   imports: [IonText, IonButton, IonButtons, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
-export class CreateUserPage{
+export class CreateUserModal {
   private modalController = inject(ModalController);
   private usersStore = inject(UsersStore);
   private fb = inject(FormBuilder);

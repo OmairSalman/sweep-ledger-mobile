@@ -7,7 +7,7 @@ import { addIcons } from 'ionicons';
 import { add, businessOutline, cubeOutline, alertCircleOutline } from 'ionicons/icons';
 import { RouterLink } from '@angular/router';
 import { NavController } from '@ionic/angular/standalone';
-import { CreateSweepPage } from 'src/app/pages/create-sweep/create-sweep.page';
+import { CreateSweepModal } from 'src/app/pages/create-sweep/create-sweep.page';
 import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
@@ -48,7 +48,7 @@ export class SweepsListPage implements ViewWillEnter {
   async openCreateSweep()
   {
     const modal = await this.modalController.create({
-      component: CreateSweepPage
+      component: CreateSweepModal
     });
     await modal.present();
     const { data, role } = await modal.onWillDismiss();

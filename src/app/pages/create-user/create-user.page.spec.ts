@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateUserPage } from './create-user.page';
+import { CreateUserModal } from './create-user.page';
 
 describe('CreateUserPage', () => {
-  let component: CreateUserPage;
-  let fixture: ComponentFixture<CreateUserPage>;
+  let component: CreateUserModal;
+  let fixture: ComponentFixture<CreateUserModal>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateUserPage);
+    fixture = TestBed.createComponent(CreateUserModal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

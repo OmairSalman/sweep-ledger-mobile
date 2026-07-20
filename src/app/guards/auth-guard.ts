@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if(authStore.isAuthReady())
   {
-    return authStore.currentUser() ? true : router.createUrlTree(['/login']);
+    return resolveDestination(authStore, router);
   }
 
   return coldBootCheck(authStore, router, tokenStorage, biometrics);
@@ -26,8 +26,8 @@ async function coldBootCheck(authStore: AuthStore, router: Router, tokenStorage:
   const refreshToken = await tokenStorage.getRefreshToken();
   if(!refreshToken)
   {
-    const user = await firstValueFrom(authStore.checkAuth());
-    return user ? true : router.createUrlTree(['/login']);
+    await firstValueFrom(authStore.checkAuth());
+    return resolveDestination(authStore, router);
   }
 
   const available = await biometrics.isAvailable();
@@ -45,6 +45,18 @@ async function coldBootCheck(authStore: AuthStore, router: Router, tokenStorage:
     }
   }
 
-  const user = await firstValueFrom(authStore.checkAuth());
-  return user ? true : router.createUrlTree(['/login']);
+  await firstValueFrom(authStore.checkAuth());
+  return resolveDestination(authStore, router);
+}
+
+function resolveDestination(authStore: AuthStore, router: Router): true | UrlTree
+{
+  if (!authStore.currentUser()) return router.createUrlTree(['/login']);
+
+  if (authStore.activeRole() === null && authStore.availableRoles().length >= 1)
+  {
+    return router.createUrlTree(['/select-role']);
+  }
+
+  return true;
 }

@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    @if (authStore.activeRole() !== null) {
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/profile"></ion-back-button>
+      </ion-buttons>
+    }
+    <ion-title>Select a role</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    @for (role of authStore.availableRoles(); track role.id) {
+      <ion-item button detail="false" (click)="pick(role)">
+        <ion-label>{{ role.name }}</ion-label>
+        @if (applying() === role.id)
+        {
+          <ion-spinner slot="end" name="circular"></ion-spinner>
+        }
+        @else if (authStore.activeRole()?.id === role.id)
+        {
+          <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+        }
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>

@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateSweepModal } from './create-sweep.page';
+import { PagesListPage } from './pages-list.page';
 
-describe('CreateSweepPage', () => {
-  let component: CreateSweepModal;
-  let fixture: ComponentFixture<CreateSweepModal>;
+describe('PagesListPage', () => {
+  let component: PagesListPage;
+  let fixture: ComponentFixture<PagesListPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateSweepModal);
+    fixture = TestBed.createComponent(PagesListPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -13,7 +13,7 @@ import { SweepsStore } from 'src/app/services/sweeps-store';
   standalone: true,
   imports: [IonSpinner, IonText, IonButtons, IonButton, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
-export class CreateSweepPage {
+export class CreateSweepModal {
   private modalController = inject(ModalController);
   private alertController = inject(AlertController);
   private sweepsStore = inject(SweepsStore);

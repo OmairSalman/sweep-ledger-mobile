@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateSweepModal } from './create-sweep.page';
+import { RoleDetailPage } from './role-detail.page';
 
-describe('CreateSweepPage', () => {
-  let component: CreateSweepModal;
-  let fixture: ComponentFixture<CreateSweepModal>;
+describe('RoleDetailPage', () => {
+  let component: RoleDetailPage;
+  let fixture: ComponentFixture<RoleDetailPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateSweepModal);
+    fixture = TestBed.createComponent(RoleDetailPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
