@@ -1,0 +1,68 @@
+// Role picker — PAU design system.
+// One grouped card: the roles are one set the user picks from. The active
+// role carries a success checkmark; a per-row spinner shows while applying.
+
+ion-content {
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-4);
+  --padding-bottom: var(--pau-space-8);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
+}
+
+.picker-hint {
+  max-inline-size: 480px;
+  margin: var(--pau-space-2) auto var(--pau-space-3);
+  padding-inline: var(--pau-space-1);
+  font-size: var(--pau-text-sm);
+  color: var(--pau-ink-muted);
+}
+
+.picker-card {
+  padding: 0;
+  max-inline-size: 480px;
+  margin-inline: auto;
+  border-radius: var(--pau-radius-lg);
+  overflow: hidden;
+  background: var(--ion-item-background);
+  box-shadow: var(--pau-shadow-sm);
+
+  ion-item {
+    --background: var(--ion-item-background);
+    --min-height: 60px;
+    --padding-start: var(--pau-space-4);
+    --inner-padding-end: var(--pau-space-4);
+    --border-color: var(--pau-hairline);
+  }
+
+  ion-item:last-of-type {
+    --border-width: 0;
+  }
+
+  .pau-tile {
+    inline-size: 40px;
+    block-size: 40px;
+    margin-inline-end: var(--pau-space-3);
+  }
+
+  .pau-tile ion-icon {
+    font-size: 20px;
+  }
+
+  ion-label {
+    font-size: var(--pau-text-base);
+    font-weight: var(--pau-weight-semibold);
+  }
+
+  ion-spinner {
+    inline-size: 22px;
+    block-size: 22px;
+    color: var(--ion-color-primary);
+  }
+
+  /* Success green: "this is the one that's on", matching the toggle language. */
+  .picker-check {
+    font-size: 22px;
+    color: var(--ion-color-success);
+  }
+}

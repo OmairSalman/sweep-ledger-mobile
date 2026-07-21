@@ -157,7 +157,9 @@ export class AuthStore {
 
   getMyRoles(): Observable<Role[]>
   {
-    return this.api.get<Role[]>('/auth/my-roles');
+    return this.api.get<Role[]>('/auth/my-roles').pipe(
+      tap((roles) => this.availableRoles.set(roles))
+    );
   }
 
   selectRole(roleId: number, deviceId: string): Observable<SelectRoleResponse>

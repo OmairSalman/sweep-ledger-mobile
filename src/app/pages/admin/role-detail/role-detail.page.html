@@ -14,11 +14,13 @@
 </ion-header>
 
 <ion-content>
+  <!-- Structural room reserved: a future rename card slots in here,
+       above the matrix, as a .pau-card. -->
   @if (loading()) {
     <div class="center-state"><ion-spinner name="circular"></ion-spinner></div>
   }
   @else if (errorMsg()) {
-    <div class="center-state">
+    <div class="center-state" role="alert">
       <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
     </div>
   }
@@ -31,32 +33,41 @@
     @else {
       <ion-list>
         @for (row of matrix(); track row.pageId) {
-          <ion-item button detail="false" (click)="toggleExpanded(row.pageId)">
-            <ion-label>
-              <h2>{{ row.pageName }}</h2>
-            </ion-label>
-            <ion-icon slot="end" [name]="row.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-          </ion-item>
+          <div class="matrix-card">
+            <ion-item button detail="false" lines="none" (click)="toggleExpanded(row.pageId)"
+                      [attr.aria-expanded]="row.expanded">
+              <div class="pau-tile" slot="start">
+                <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-label>
+                <h2>{{ row.pageName }}</h2>
+                <p class="matrix-card__key">{{ row.pageKey }}</p>
+              </ion-label>
+              <ion-icon slot="end" class="matrix-card__chevron"
+                        [name]="row.expanded ? 'chevron-up-outline' : 'chevron-down-outline'"
+                        aria-hidden="true"></ion-icon>
+            </ion-item>
 
-          @if (row.expanded) {
-            <div class="permission-toggles">
-              <ion-item lines="none">
-                <ion-toggle [checked]="row.isRead" (ionChange)="onToggle(row.pageId, 'isRead', $event)">Read</ion-toggle>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-toggle [checked]="row.isWrite" (ionChange)="onToggle(row.pageId, 'isWrite', $event)">Create</ion-toggle>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-toggle [checked]="row.isUpdate" (ionChange)="onToggle(row.pageId, 'isUpdate', $event)">Update</ion-toggle>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-toggle [checked]="row.isDelete" (ionChange)="onToggle(row.pageId, 'isDelete', $event)">Delete</ion-toggle>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-toggle [checked]="row.isPrint" (ionChange)="onToggle(row.pageId, 'isPrint', $event)">Print</ion-toggle>
-              </ion-item>
-            </div>
-          }
+            @if (row.expanded) {
+              <div class="permission-toggles">
+                <ion-item lines="none">
+                  <ion-toggle [checked]="row.isRead" (ionChange)="onToggle(row.pageId, 'isRead', $event)">Read</ion-toggle>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-toggle [checked]="row.isWrite" (ionChange)="onToggle(row.pageId, 'isWrite', $event)">Create</ion-toggle>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-toggle [checked]="row.isUpdate" (ionChange)="onToggle(row.pageId, 'isUpdate', $event)">Update</ion-toggle>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-toggle [checked]="row.isDelete" (ionChange)="onToggle(row.pageId, 'isDelete', $event)">Delete</ion-toggle>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-toggle [checked]="row.isPrint" (ionChange)="onToggle(row.pageId, 'isPrint', $event)">Print</ion-toggle>
+                </ion-item>
+              </div>
+            }
+          </div>
         }
       </ion-list>
     }

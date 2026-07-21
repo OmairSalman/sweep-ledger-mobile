@@ -112,6 +112,24 @@
   --ion-item-background:      #1c1c1f;
   --ion-card-background:      #1c1c1f;
   --ion-border-color:         #2c2c30;
+  --ion-overlay-background-color: #1c1c1f;
+
+  /* Text-color step ramp (dark) — linear blend #121214 → #f2f2f4.
+     The design system omits this, but Ionic components default onto it
+     (action-sheet button text is --ion-color-step-850); without a dark
+     ramp they inherit the light values and render dark-on-dark. */
+  --ion-color-step-50:   #1d1d1f;
+  --ion-color-step-100:  #28282a;
+  --ion-color-step-150:  #343436;
+  --ion-color-step-200:  #3f3f41;
+  --ion-color-step-300:  #555557;
+  --ion-color-step-400:  #6c6c6e;
+  --ion-color-step-500:  #828284;
+  --ion-color-step-600:  #98989a;
+  --ion-color-step-700:  #afafb1;
+  --ion-color-step-800:  #c5c5c7;
+  --ion-color-step-850:  #d0d0d2;
+  --ion-color-step-900:  #dcdcde;
 
   /* Brand aliases (dark) */
   --pau-maroon:        #8a1a13;
@@ -221,6 +239,7 @@
   --ion-item-background:      #ffffff;
   --ion-card-background:      #ffffff;
   --ion-border-color:         #e6e7ea;
+  --ion-overlay-background-color: #ffffff;
 
   /* ---- Ionic text-color step ramp (light) ---- */
   --ion-color-step-50:   #eeeef0;

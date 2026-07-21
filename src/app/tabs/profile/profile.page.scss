@@ -31,6 +31,35 @@ ion-content {
   margin-block-start: var(--pau-space-1);
 }
 
+/* ---- Role-switch affordance ----
+   Sits flush in the kv row: a value that happens to be tappable. The swap
+   glyph carries the affordance; text weight matches the other kv values. */
+.pau-kv ion-button.pau-kv__v {
+  margin: 0;
+  block-size: auto;
+  min-block-size: 32px;
+  --padding-start: var(--pau-space-2);
+  --padding-end: 0;
+  --color: var(--ion-color-primary);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
+
+  ion-icon[slot="end"] {
+    font-size: 18px;
+    margin-inline-start: var(--pau-space-1);
+  }
+}
+
+/* Dark maroon is a fill, never a bare glyph: as clear-button text on the dark
+   card it is 1.81:1. Full ink there; the swap icon still signals the action. */
+@media (prefers-color-scheme: dark) {
+  .pau-kv ion-button.pau-kv__v {
+    --color: var(--pau-ink);
+  }
+}
+
 /* ---- Account actions ----
    Both are outline: the maroon CTA inside the card is the page's primary
    action, so a second solid button would compete with it. Log out stays

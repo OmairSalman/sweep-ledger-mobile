@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Roles</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openRoleForm(null)">
+      <ion-button (click)="openRoleForm(null)" aria-label="Create role">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -19,20 +19,23 @@
     </div>
   }
   @else if (errorMsg()) {
-    <div class="center-state">
+    <div class="center-state" role="alert">
       <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
     </div>
   }
   @else if (rolesStore.roles().length === 0) {
     <div class="center-state">
-      <p>No roles defined yet.</p>
+      <p>No roles defined yet. Tap + to add the first one.</p>
     </div>
   }
   @else {
     <ion-list>
       @for (role of rolesStore.roles(); track role.id) {
-        <ion-item-sliding>
-          <ion-item button [routerLink]="['/admin/role', role.id]">
+        <ion-item-sliding class="entity-row">
+          <ion-item button [routerLink]="['/admin/role', role.id]" detail lines="none">
+            <div class="pau-tile" slot="start">
+              <ion-icon name="id-card-outline" aria-hidden="true"></ion-icon>
+            </div>
             <ion-label>
               <h2>{{ role.name }}</h2>
             </ion-label>

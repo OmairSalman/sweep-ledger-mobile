@@ -44,7 +44,8 @@ export class UsersListPage implements ViewWillEnter {
   {
     const modal = await this.modalController.create({
       component: UserRolesModal,
-      componentProps: { user }
+      componentProps: { user },
+      backdropDismiss: false
     });
     await modal.present();
     await modal.onWillDismiss();

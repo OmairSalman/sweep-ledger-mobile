@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonIcon, IonItem, IonList, IonBackButton, IonButtons, ModalController, ToastController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { peopleOutline, personAddOutline, notificationsOutline } from 'ionicons/icons';
+import { peopleOutline, personAddOutline, notificationsOutline, documentsOutline, idCardOutline } from 'ionicons/icons';
 import { RouterLink } from '@angular/router';
 import { CreateUserModal } from '../../create-user/create-user.page';
+import { UserRolesModal } from '../../user-roles/user-roles.page';
 import { NotificationFormPage } from '../../notification-form/notification-form.page';
 import { AuthStore } from 'src/app/services/auth-store';
 
@@ -22,7 +23,7 @@ export class AdminPanelPage {
   authStore = inject(AuthStore);
   
   constructor() {
-    addIcons({peopleOutline,personAddOutline,notificationsOutline});
+    addIcons({peopleOutline,personAddOutline,notificationsOutline,documentsOutline,idCardOutline});
   }
 
   private async showToast(message: string, css: string)
@@ -45,7 +46,15 @@ export class AdminPanelPage {
     const { data, role } = await modal.onWillDismiss();
     if(role === 'confirm' && data)
     {
-      this.showToast(`${data.name} created successfully`, 'app-toast-success')
+      this.showToast(`${data.name} created successfully`, 'app-toast-success');
+      // A user without a role can't sign in — chain straight into role
+      // assignment for the account that was just created.
+      const rolesModal = await this.modalController.create({
+        component: UserRolesModal,
+        componentProps: { user: data },
+        backdropDismiss: false
+      });
+      await rolesModal.present();
     }
   }
 

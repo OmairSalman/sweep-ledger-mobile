@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, ToastController, ViewWillEnter, IonButtons, IonBackButton, IonButton, IonIcon, IonSpinner, IonText, IonList, IonItem, IonLabel, IonItemSliding, IonItemOption, IonItemOptions } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { add, idCardOutline } from 'ionicons/icons';
 import { RolesStore } from 'src/app/services/roles-store';
 import { Role } from 'src/models/role';
 import { RoleFormModal } from '../../role-form/role-form.page';
@@ -23,7 +24,9 @@ export class RolesListPage implements ViewWillEnter {
   loading = signal(false);
   errorMsg = signal('');
 
-  constructor() { }
+  constructor() {
+    addIcons({ add, idCardOutline });
+  }
 
   ionViewWillEnter(): void
   {

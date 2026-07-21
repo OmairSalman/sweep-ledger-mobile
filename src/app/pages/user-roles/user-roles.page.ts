@@ -51,9 +51,32 @@ export class UserRolesModal implements OnInit {
     })
   }
 
-  close()
+  async close()
   {
+    if (!(await this.canClose())) return;
     this.modalController.dismiss(null, 'done');
+  }
+
+  private async canClose(): Promise<boolean>
+  {
+    // Guarding close() covers the only in-UI exit; the creation sites set
+    // backdropDismiss: false so the backdrop can't slip past this check.
+    // Android hardware back still bypasses it — accepted, per the same call
+    // made for the create-sweep discard guard.
+    // Escape hatches so the admin can never be trapped: nothing exists to
+    // assign, or the roles list failed to load.
+    if (this.assignedIds().size > 0 || this.rolesStore.roles().length === 0 || this.errorMsg())
+    {
+      return true;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'No role assigned',
+      message: `${this.user.name} can't sign in without a role. Assign at least one before closing.`,
+      buttons: [{ text: 'OK', role: 'cancel' }]
+    });
+    await alert.present();
+    return false;
   }
 
   async onToggle(role: Role, event: CustomEvent)
@@ -97,7 +120,16 @@ export class UserRolesModal implements OnInit {
       : this.usersStore.revokeRole(this.user.id, role.id);
 
     call.subscribe({
-      next:(freshRoles) => this.assignedIds.set(new Set(freshRoles.map(r => r.id))),
+      next:(freshRoles) =>
+      {
+        this.assignedIds.set(new Set(freshRoles.map(r => r.id)));
+        // Editing your own assignments must reflect in the picker/profile
+        // immediately — the response already carries the fresh list.
+        if (this.user.id === this.authStore.currentUser()?.id)
+        {
+          this.authStore.availableRoles.set(freshRoles);
+        }
+      },
       error:(err) =>
       {
         if (checked && err?.status === 409)

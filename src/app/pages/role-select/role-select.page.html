@@ -10,9 +10,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <p class="picker-hint">Choose which role to use for this session.</p>
+  <ion-list class="picker-card">
     @for (role of authStore.availableRoles(); track role.id) {
-      <ion-item button detail="false" (click)="pick(role)">
+      <ion-item button detail="false" lines="full" (click)="pick(role)"
+                [attr.aria-pressed]="authStore.activeRole()?.id === role.id">
+        <div class="pau-tile" slot="start">
+          <ion-icon name="id-card-outline" aria-hidden="true"></ion-icon>
+        </div>
         <ion-label>{{ role.name }}</ion-label>
         @if (applying() === role.id)
         {
@@ -20,7 +25,7 @@
         }
         @else if (authStore.activeRole()?.id === role.id)
         {
-          <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+          <ion-icon slot="end" class="picker-check" name="checkmark-outline" aria-hidden="true"></ion-icon>
         }
       </ion-item>
     }

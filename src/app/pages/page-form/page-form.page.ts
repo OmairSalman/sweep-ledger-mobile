@@ -1,7 +1,9 @@
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonText, IonItem, IonList, IonSpinner, IonButton, IonButtons, IonInput } from '@ionic/angular/standalone';
+import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonText, IonSpinner, IonButton, IonButtons, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { textOutline, codeSlashOutline, alertCircleOutline } from 'ionicons/icons';
 import { PagesStore } from 'src/app/services/pages-store';
 import { Page } from 'src/models/page';
 
@@ -10,11 +12,11 @@ import { Page } from 'src/models/page';
   templateUrl: './page-form.page.html',
   styleUrls: ['./page-form.page.scss'],
   standalone: true,
-  imports: [IonInput, IonButtons, IonButton, IonSpinner, IonList, IonItem, IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
+  imports: [IonIcon, IonButtons, IonButton, IonSpinner, IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
 export class PageFormModal implements OnInit {
   @Input() page: Page | null = null;
-  
+
   private modalController = inject(ModalController);
   private alertController = inject(AlertController);
   private pagesStore = inject(PagesStore);
@@ -23,7 +25,9 @@ export class PageFormModal implements OnInit {
   saving = signal(false);
   errorMsg = signal('');
 
-  constructor() { }
+  constructor() {
+    addIcons({ textOutline, codeSlashOutline, alertCircleOutline });
+  }
 
   form = this.fb.nonNullable.group({
     name: ['', Validators.required],

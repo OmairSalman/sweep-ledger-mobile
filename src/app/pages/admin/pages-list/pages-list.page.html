@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Pages</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openPageForm(null)">
+      <ion-button (click)="openPageForm(null)" aria-label="Create page">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -19,23 +19,26 @@
     </div>
   }
   @else if (errorMsg()) {
-    <div class="center-state">
+    <div class="center-state" role="alert">
       <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
     </div>
   }
   @else if (pagesStore.pages().length === 0) {
     <div class="center-state">
-      <p>No pages defined yet.</p>
+      <p>No pages defined yet. Tap + to add the first one.</p>
     </div>
   }
   @else {
     <ion-list>
       @for (page of pagesStore.pages(); track page.id) {
-        <ion-item-sliding>
-          <ion-item button (click)="openPageForm(page)">
+        <ion-item-sliding class="entity-row">
+          <ion-item button (click)="openPageForm(page)" lines="none">
+            <div class="pau-tile" slot="start">
+              <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
+            </div>
             <ion-label>
               <h2>{{ page.name }}</h2>
-              <p>{{ page.pageKey }}</p>
+              <p class="entity-row__key">{{ page.pageKey }}</p>
             </ion-label>
           </ion-item>
           <ion-item-options side="end">

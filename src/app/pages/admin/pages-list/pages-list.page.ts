@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, ToastController, ViewWillEnter, IonText, IonButtons, IonButton, IonSpinner, IonList, IonItemSliding, IonItem, IonLabel, IonItemOptions, IonItemOption, IonIcon, IonBackButton } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { add, documentTextOutline } from 'ionicons/icons';
 import { PagesStore } from 'src/app/services/pages-store';
 import { PageFormModal } from '../../page-form/page-form.page';
 import { Page } from 'src/models/page';
@@ -21,7 +23,9 @@ export class PagesListPage implements ViewWillEnter {
   loading = signal(false);
   errorMsg = signal('');
 
-  constructor() { }
+  constructor() {
+    addIcons({ add, documentTextOutline });
+  }
 
   ionViewWillEnter(): void
   {

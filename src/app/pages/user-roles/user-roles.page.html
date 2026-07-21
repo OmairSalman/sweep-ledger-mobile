@@ -16,16 +16,17 @@
   }
   @else if(errorMsg())
   {
-    <div class="center-state">
+    <div class="center-state" role="alert">
       <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
     </div>
   }
   @else
   {
-    <ion-list>
+    <p class="roles-hint">Roles this user can sign in with.</p>
+    <ion-list class="roles-card">
       @for(role of rolesStore.roles(); track role.id)
       {
-        <ion-item lines="none">
+        <ion-item lines="full">
           <ion-toggle
             [checked]="assignedIds().has(role.id)"
             (ionChange)="onToggle(role, $event)">

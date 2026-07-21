@@ -2,6 +2,8 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonButtons, IonBackButton, IonText, IonSpinner, IonList, IonItem, IonLabel, IonIcon, IonToggle, IonButton, ActionSheetController, AlertController, ToastController } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { add, chevronUpOutline, chevronDownOutline, documentTextOutline } from 'ionicons/icons';
 import { MatrixRow, PagePermissionEntry, Role, RolePagePermissions } from 'src/models/role';
 import { RolesStore } from 'src/app/services/roles-store';
 import { forkJoin } from 'rxjs';
@@ -43,7 +45,9 @@ export class RoleDetailPage implements ViewWillEnter {
     return JSON.stringify(normalize(this.matrix())) !== JSON.stringify(normalize(this.snapshot));
   });
 
-  constructor() { }
+  constructor() {
+    addIcons({ add, chevronUpOutline, chevronDownOutline, documentTextOutline });
+  }
 
   ionViewWillEnter(): void
   {
@@ -84,8 +88,11 @@ export class RoleDetailPage implements ViewWillEnter {
     const currentRole = this.rolesStore.roles().find(r => r.id === this.roleId);
     if(currentRole !== undefined)
     {
+      // Deliberately no loading.set(false) here: the forkJoin in
+      // ionViewWillEnter owns the spinner. Ending it on this cache-hit path
+      // dropped the page into the empty-state while pages/permissions were
+      // still in flight.
       this.role.set(currentRole);
-      this.loading.set(false);
     }
     else
     {
@@ -162,11 +169,6 @@ export class RoleDetailPage implements ViewWillEnter {
   private removeRow(pageId: number)
   {
     this.matrix.update(rows => rows.filter(r => r.pageId !== pageId));
-  }
-
-  private resyncToggles()
-  {
-    this.matrix.update(rows => rows.map(r => ({ ...r })));
   }
 
   private resyncRead(pageId: number)

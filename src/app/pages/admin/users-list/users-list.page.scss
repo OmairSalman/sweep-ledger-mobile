@@ -74,16 +74,17 @@ ion-badge {
   letter-spacing: var(--pau-tracking-normal);
 }
 
-/* ---- Promote action ---- */
-.user-row ion-button {
-  --border-radius: var(--pau-radius-pill);
-  --border-width: 1.5px;
-  --padding-start: var(--pau-space-3);
-  --padding-end: var(--pau-space-3);
-  block-size: 32px;
-  margin: 0;
+/* ---- Assigned roles line ----
+   Semibold and slightly darker than the username above it: the roles are the
+   row's payload for an admin scanning who-can-do-what. */
+.user-row .user-roles {
   font-size: var(--pau-text-xs);
-  font-weight: var(--pau-weight-bold);
-  text-transform: none;
-  letter-spacing: var(--pau-tracking-normal);
+  font-weight: var(--pau-weight-semibold);
+  color: var(--pau-ink);
+  margin-block-start: var(--pau-space-1);
+}
+
+/* "No role" badge (warning = dark text on amber, AA-safe by the token). */
+.user-row ion-badge {
+  margin-block-start: var(--pau-space-1);
 }

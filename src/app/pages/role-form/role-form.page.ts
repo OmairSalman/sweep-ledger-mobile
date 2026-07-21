@@ -1,7 +1,9 @@
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonSpinner, IonList, IonItem, IonText, IonInput } from '@ionic/angular/standalone';
+import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ModalController, IonButtons, IonButton, IonSpinner, IonText, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { idCardOutline, alertCircleOutline } from 'ionicons/icons';
 import { Role } from 'src/models/role';
 import { RolesStore } from 'src/app/services/roles-store';
 
@@ -10,7 +12,7 @@ import { RolesStore } from 'src/app/services/roles-store';
   templateUrl: './role-form.page.html',
   styleUrls: ['./role-form.page.scss'],
   standalone: true,
-  imports: [IonInput, IonText, IonItem, IonList, IonSpinner, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
+  imports: [IonIcon, IonText, IonSpinner, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule]
 })
 export class RoleFormModal implements OnInit {
   @Input() role: Role | null = null;
@@ -23,7 +25,9 @@ export class RoleFormModal implements OnInit {
   saving = signal(false);
   errorMsg = signal('');
 
-  constructor() { }
+  constructor() {
+    addIcons({ idCardOutline, alertCircleOutline });
+  }
 
   form = this.fb.nonNullable.group({
     name: ['', Validators.required]

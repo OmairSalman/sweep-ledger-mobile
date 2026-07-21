@@ -1,0 +1,17 @@
+// Roles list — PAU design system.
+// Rows use the shared .entity-row pattern; states use .center-state (global).
+
+ion-content {
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-4);
+  --padding-bottom: var(--pau-space-8);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
+}
+
+ion-list {
+  background: transparent;
+  padding: 0;
+  max-inline-size: 480px;
+  margin-inline: auto;
+}

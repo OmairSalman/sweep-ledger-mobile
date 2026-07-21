@@ -4,31 +4,54 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button [strong]="true" (click)="submit()" [disabled]="form.invalid || saving()">
-        @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
-        @else { {{ page ? 'Save' : 'Create' }} }
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form">
-    <ion-list>
-      <ion-item>
-        <ion-input label="Name" labelPlacement="floating" formControlName="name"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input label="Page key" labelPlacement="floating" formControlName="pageKey"
-                   autocapitalize="off" autocorrect="off" spellcheck="false"></ion-input>
-      </ion-item>
-    </ion-list>
-  </form>
+  <div class="modal-shell">
+    <form [formGroup]="form" class="modal-form">
+      <div class="pau-field">
+        <ion-icon name="text-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input"
+          type="text"
+          formControlName="name"
+          placeholder="Name"
+          aria-label="Name" />
+      </div>
 
-  @if (errorMsg()) {
-    <ion-text color="danger">
-      <p class="error-text">{{ errorMsg() }}</p>
-    </ion-text>
-  }
+      <!-- pageKey is a technical identifier — mono, no autocorrect -->
+      <div class="pau-field">
+        <ion-icon name="code-slash-outline" class="field-icon" aria-hidden="true"></ion-icon>
+        <input
+          class="field-input field-input--mono"
+          type="text"
+          formControlName="pageKey"
+          placeholder="Page key (e.g. sweeps)"
+          aria-label="Page key"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false" />
+      </div>
+    </form>
+
+    @if (errorMsg()) {
+      <div class="pau-notice pau-notice--error" role="alert">
+        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+        <ion-text color="danger">
+          <p class="error-text">{{ errorMsg() }}</p>
+        </ion-text>
+      </div>
+    }
+
+    <ion-button
+      class="pau-cta"
+      expand="block"
+      [strong]="true"
+      (click)="submit()"
+      [disabled]="form.invalid || saving()">
+      @if (saving()) { <ion-spinner name="circular"></ion-spinner> }
+      @else { {{ page ? 'Save changes' : 'Create page' }} }
+    </ion-button>
+  </div>
 </ion-content>

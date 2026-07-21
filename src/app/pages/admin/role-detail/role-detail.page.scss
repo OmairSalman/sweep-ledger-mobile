@@ -1,0 +1,107 @@
+// Role detail — permission matrix, PAU design system.
+// Each page is one card: a header row (tile, name, mono key, chevron) over an
+// inset panel of permission toggles when expanded. Toggles are green-when-on
+// globally. A future rename card slots in above the list as a .pau-card.
+// Logical properties throughout for RTL-readiness.
+
+ion-content {
+  --background: var(--pau-bg);
+  --padding-top: var(--pau-space-4);
+  --padding-bottom: var(--pau-space-8);
+  --padding-start: var(--pau-page-gutter);
+  --padding-end: var(--pau-page-gutter);
+}
+
+ion-list {
+  background: transparent;
+  padding: 0;
+  max-inline-size: 480px;
+  margin-inline: auto;
+}
+
+.matrix-card {
+  margin-block-end: var(--pau-space-3);
+  border-radius: var(--pau-radius-lg);
+  overflow: hidden;
+  background: var(--ion-item-background);
+  box-shadow: var(--pau-shadow-xs);
+
+  > ion-item {
+    --background: var(--ion-item-background);
+    --border-width: 0;
+    --min-height: 64px;
+    --padding-start: var(--pau-space-4);
+    --inner-padding-end: var(--pau-space-4);
+  }
+
+  .pau-tile {
+    inline-size: 36px;
+    block-size: 36px;
+    margin-inline-end: var(--pau-space-3);
+  }
+
+  .pau-tile ion-icon {
+    font-size: 18px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: var(--pau-text-base);
+    font-weight: var(--pau-weight-bold);
+    line-height: var(--pau-leading-snug);
+  }
+
+  .matrix-card__key {
+    margin: 2px 0 0;
+    font-family: var(--pau-font-mono);
+    font-size: var(--pau-text-xs);
+    color: var(--pau-ink-muted);
+  }
+
+  .matrix-card__chevron {
+    color: var(--pau-ink-muted);
+    font-size: 18px;
+  }
+}
+
+/* Inset panel: the page's grants, visually "inside" the card. */
+.permission-toggles {
+  background: var(--pau-bg);
+  border-block-start: 1px solid var(--pau-hairline);
+  padding-block: var(--pau-space-2);
+
+  ion-item {
+    --background: transparent;
+    --border-width: 0;
+    --min-height: 44px;
+    --padding-start: var(--pau-space-5);
+    --inner-padding-end: var(--pau-space-4);
+  }
+
+  ion-toggle {
+    font-size: var(--pau-text-sm);
+    font-weight: var(--pau-weight-semibold);
+
+    /* The global green ON-track is 2.89:1 against this inset panel in light
+       mode (3:1 needed for UI states). The shade clears it in both palettes. */
+    --track-background-checked: var(--ion-color-success-shade);
+  }
+}
+
+.add-page-btn {
+  max-inline-size: 480px;
+  margin-block-start: var(--pau-space-2);
+  margin-inline: auto;
+  display: block;
+  block-size: 52px;
+  --border-radius: var(--pau-radius-lg);
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-semibold);
+  text-transform: none;
+  letter-spacing: var(--pau-tracking-normal);
+
+  ion-icon[slot="start"] {
+    font-size: 20px;
+    margin-inline-end: var(--pau-space-2);
+  }
+}

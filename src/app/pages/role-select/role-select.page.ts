@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, ToastController, IonList, IonItem, IonLabel, IonSpinner, IonIcon, IonButtons, IonBackButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { checkmarkOutline, idCardOutline } from 'ionicons/icons';
 import { AuthStore } from 'src/app/services/auth-store';
 import { Role } from 'src/models/role';
 
@@ -19,6 +21,10 @@ export class RoleSelectPage {
   private toastController = inject(ToastController);
 
   applying = signal<number | null>(null);
+
+  constructor() {
+    addIcons({ checkmarkOutline, idCardOutline });
+  }
 
   pick(role: Role)
   {

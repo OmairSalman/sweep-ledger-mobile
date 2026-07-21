@@ -88,6 +88,133 @@ ion-toast {
 }
 
 /* ============================================================
+   Action sheet — design system
+   ------------------------------------------------------------
+   Surface and text colours come from THEME TOKENS, not overrides
+   here: --ion-overlay-background-color plus the dark step ramp in
+   theme/variables.scss (button text defaults to step-850). Ionic's
+   scoped :host class (.sc-ion-action-sheet-*-h, specificity 0,1,0)
+   outranks element selectors, so ion-action-sheet { --var: … }
+   blocks are silently inert — do not reintroduce one. Only
+   properties Ionic leaves uncontested belong below.
+   ============================================================ */
+ion-action-sheet .action-sheet-group:first-of-type {
+  border-start-start-radius: var(--pau-radius-lg);
+  border-start-end-radius: var(--pau-radius-lg);
+}
+
+/* Doubled class beats Ionic's scoped selector (0,2,0) for the one contested
+   property: the title's default (step-400) is 3.24:1 on the dark sheet, under
+   AA. --pau-ink-muted measures 5.33:1 light / 6.04:1 dark. */
+ion-action-sheet .action-sheet-title.action-sheet-title {
+  color: var(--pau-ink-muted);
+  font-weight: var(--pau-weight-semibold);
+}
+
+ion-action-sheet .action-sheet-cancel {
+  font-weight: var(--pau-weight-bold);
+}
+
+/* ============================================================
+   Toggle — green track when on, otherwise Ionic's native look.
+   DELIBERATE deviation from components/forms/Toggle.jsx (the
+   contained 58×32 iOS-style pill): the specimen look was built,
+   eyeballed on device, and rejected in favour of this one.
+   ============================================================ */
+ion-toggle {
+  --track-background-checked: var(--ion-color-success);
+  --handle-background-checked: #ffffff;
+}
+
+/* ============================================================
+   .entity-row — admin list row: a card with a leading icon tile,
+   title + optional key/subtitle, swipe actions clipped to the
+   radius. Shared by the pages and roles lists (users-list predates
+   it with the same anatomy).
+   ============================================================ */
+.entity-row {
+  display: block;
+  margin-block-end: var(--pau-space-3);
+  border-radius: var(--pau-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--pau-shadow-xs);
+}
+
+.entity-row ion-item {
+  --background: var(--ion-item-background);
+  --border-width: 0;
+  --min-height: 64px;
+  --padding-start: var(--pau-space-4);
+  --inner-padding-end: var(--pau-space-4);
+  --padding-top: var(--pau-space-2);
+  --padding-bottom: var(--pau-space-2);
+  --detail-icon-color: var(--pau-ink-muted);
+  --detail-icon-opacity: 1;
+}
+
+.entity-row .pau-tile {
+  inline-size: 40px;
+  block-size: 40px;
+  margin-inline-end: var(--pau-space-3);
+}
+
+.entity-row .pau-tile ion-icon {
+  font-size: 20px;
+}
+
+.entity-row h2 {
+  margin: 0;
+  font-size: var(--pau-text-base);
+  font-weight: var(--pau-weight-bold);
+  line-height: var(--pau-leading-snug);
+}
+
+/* Technical identifiers (pageKey) read in mono, per the design system. */
+.entity-row .entity-row__key {
+  margin: 2px 0 0;
+  font-family: var(--pau-font-mono);
+  font-size: var(--pau-text-xs);
+  color: var(--pau-ink-muted);
+}
+
+.entity-row ion-item-option {
+  font-size: var(--pau-text-sm);
+  font-weight: var(--pau-weight-bold);
+  --padding-start: var(--pau-space-5);
+  --padding-end: var(--pau-space-5);
+}
+
+/* ============================================================
+   .center-state — shared centred loading / error / empty state
+   ------------------------------------------------------------
+   Lightweight sibling of .pau-state for states that carry no icon
+   circle: same centring and voice, no extra markup required.
+   ============================================================ */
+.center-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--pau-space-3);
+  padding: var(--pau-space-10) var(--pau-space-6);
+  min-block-size: 50vh;
+}
+
+.center-state p {
+  margin: 0;
+  font-size: var(--pau-text-sm);
+  color: var(--pau-ink-muted);
+  line-height: var(--pau-leading-snug);
+}
+
+.center-state ion-spinner {
+  inline-size: 36px;
+  block-size: 36px;
+  color: var(--ion-color-primary);
+}
+
+/* ============================================================
    Alerts
    ============================================================ */
 .alert-danger-btn.alert-button {
@@ -189,6 +316,18 @@ ion-toast {
 .pau-field .field-input::placeholder {
   color: var(--pau-ink-muted);
   opacity: 1; /* Firefox dims placeholders by default */
+}
+
+/* Technical-identifier variant (page keys, codes) — mono per the DS.
+   The placeholder stays in the UI face; only typed values are code. */
+.pau-field .field-input--mono {
+  font-family: var(--pau-font-mono);
+  font-size: var(--pau-text-sm);
+}
+
+.pau-field .field-input--mono::placeholder {
+  font-family: var(--pau-font-family);
+  font-size: var(--pau-text-base);
 }
 
 /* Multiline variant. The single-line pill centres its children, which would
