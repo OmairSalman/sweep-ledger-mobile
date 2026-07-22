@@ -30,7 +30,7 @@ async function coldBootCheck(authStore: AuthStore, router: Router, tokenStorage:
     return resolveDestination(authStore, router);
   }
 
-  const available = await biometrics.isAvailable();
+  const available = (await biometrics.isEnabled()) && (await biometrics.isAvailable());
 
   if(available)
   {

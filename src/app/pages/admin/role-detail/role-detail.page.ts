@@ -1,25 +1,27 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonButtons, IonBackButton, IonText, IonSpinner, IonList, IonItem, IonLabel, IonIcon, IonToggle, IonButton, ActionSheetController, AlertController, ToastController } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, ViewWillEnter, IonButtons, IonBackButton, IonText, IonSpinner, IonList, IonItem, IonLabel, IonIcon, IonToggle, IonButton, ActionSheetController, AlertController, ToastController, IonInput } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { add, chevronUpOutline, chevronDownOutline, documentTextOutline } from 'ionicons/icons';
+import { add, chevronUpOutline, chevronDownOutline, documentTextOutline, createOutline, trashOutline, checkmarkOutline, closeOutline, idCardOutline } from 'ionicons/icons';
 import { MatrixRow, PagePermissionEntry, Role, RolePagePermissions } from 'src/models/role';
 import { RolesStore } from 'src/app/services/roles-store';
 import { forkJoin } from 'rxjs';
 import { PagesStore } from 'src/app/services/pages-store';
 import { Page } from 'src/models/page';
+import { AuthStore } from 'src/app/services/auth-store';
 
 @Component({
   selector: 'app-role-detail',
   templateUrl: './role-detail.page.html',
   styleUrls: ['./role-detail.page.scss'],
   standalone: true,
-  imports: [IonButton, IonToggle, IonIcon, IonLabel, IonItem, IonList, IonSpinner, IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, IonText]
+  imports: [IonInput, IonButton, IonToggle, IonIcon, IonLabel, IonItem, IonList, IonSpinner, IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, IonText]
 })
 export class RoleDetailPage implements ViewWillEnter {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private authStore = inject(AuthStore);
   private rolesStore = inject(RolesStore);
   private pagesStore = inject(PagesStore);
   private actionSheetController = inject(ActionSheetController);
@@ -30,6 +32,10 @@ export class RoleDetailPage implements ViewWillEnter {
   loading = signal(false);
   saving = signal(false);
   errorMsg = signal('');
+  editingName = signal(false);
+  savingName = signal(false);
+  nameDraft = signal('');
+  private nameInput = viewChild<IonInput>('nameInput');
   role = signal<Role | null>(null);
   matrix = signal<MatrixRow[]>([]);
   private snapshot: MatrixRow[] = [];
@@ -46,7 +52,7 @@ export class RoleDetailPage implements ViewWillEnter {
   });
 
   constructor() {
-    addIcons({ add, chevronUpOutline, chevronDownOutline, documentTextOutline });
+    addIcons({createOutline,trashOutline,checkmarkOutline,closeOutline,documentTextOutline,add,chevronUpOutline,chevronDownOutline,idCardOutline});
   }
 
   ionViewWillEnter(): void
@@ -72,7 +78,7 @@ export class RoleDetailPage implements ViewWillEnter {
     })
   }
 
-  private async showToast(message: string, css: string)
+  private async showToast(message: string, css: 'app-toast-success' | 'app-toast-error')
   {
     const toast = await this.toastController.create({
       message,
@@ -235,11 +241,105 @@ export class RoleDetailPage implements ViewWillEnter {
         this.saving.set(false);
         this.buildMatrix(this.pagesStore.pages(), fresh);
         this.showToast('Permissions saved', 'app-toast-success');
+        if(this.role()!.id === this.authStore.activeRole()?.id)
+        {
+          this.authStore.refreshActivePermissions().subscribe()
+        }
       },
       error: (err) =>
       {
         this.saving.set(false);
         this.showToast(typeof err?.error === 'string' ? err.error : 'Could not save permissions', 'app-toast-error');
+      }
+    })
+  }
+
+  startRename()
+  {
+    this.editingName.set(true);
+    this.nameDraft.set(this.role()!.name);
+    // The input only exists after the @if flips; focus it on the next tick.
+    setTimeout(() => this.nameInput()?.setFocus(), 0);
+  }
+
+  cancelRename()
+  {
+    this.editingName.set(false);
+    this.nameDraft.set(this.role()!.name);
+  }
+
+  saveRename()
+  {
+    this.savingName.set(true);
+    const name = this.nameDraft().trim();
+    if (!name)
+    {
+      this.savingName.set(false);
+      return;
+    }
+    this.rolesStore.updateRole(this.roleId, this.nameDraft()).subscribe({
+      next:(role) =>
+      {
+        this.role.set(role);
+        this.editingName.set(false);
+        this.nameDraft.set(this.role()!.name);
+        this.showToast('Role updated', 'app-toast-success');
+        if(this.role()!.id === this.authStore.activeRole()?.id)
+        {
+          this.authStore.availableRoles.update(roles =>
+            roles.map(r => r.id === this.role()!.id ? this.role()! : r )
+            .sort((a, b) => a.name.localeCompare(b.name))
+          )
+          this.authStore.activeRole.set(role);
+        }
+      },
+      error:(err) =>
+      {
+        this.savingName.set(false);
+        this.showToast(typeof err?.error === 'string' ? err.error : 'Could not rename role', 'app-toast-error');
+      }
+    })
+  }
+
+  async confirmDelete()
+  {
+    const roleId = this.role()?.id;
+    if (roleId === undefined) return;
+    const alert = await this.alertController.create({
+      header: 'Delete role?',
+      message: "This cannot be undone. This role's permissions will also be deleted.",
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'Delete', role: 'destructive', cssClass: 'alert-danger-btn', handler: () => this.doDelete(roleId) },
+      ],
+    });
+    await alert.present();
+  }
+
+  private doDelete(roleId: number)
+  {
+    this.rolesStore.deleteRole(roleId).subscribe({
+      next:() =>
+      {
+        this.showToast('Role deleted', 'app-toast-success');
+        this.snapshot = structuredClone(this.matrix());
+        this.router.navigate(['/admin/roles']);
+      },
+      error: async (err) =>
+      {
+        if (typeof err?.error === 'string') this.showToast(err.error, 'app-toast-error');
+        else if (err?.error?.usersCount)
+        {
+          const alert = await this.alertController.create({
+            header: 'Unable to delete role',
+            message: `The role is assigned to ${err.error.usersCount} ${err.error.usersCount === 1 ? 'user' : 'users'}. Please remove it from them before deleting it.`,
+            buttons: [
+              { text: 'Okay', role: 'cancel' },
+            ],
+          });
+          await alert.present();
+        }
+        else this.showToast('Could not delete role', 'app-toast-error');
       }
     })
   }

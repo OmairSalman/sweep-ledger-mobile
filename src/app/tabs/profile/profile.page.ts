@@ -1,42 +1,46 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonIcon } from '@ionic/angular/standalone';
+import { AlertController, IonContent, IonHeader, IonTitle, IonToolbar, ToastController, ViewWillEnter, IonButton, IonText, IonSpinner, IonIcon, IonToggle } from '@ionic/angular/standalone';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline, swapHorizontalOutline, idCardOutline } from 'ionicons/icons';
+import { personOutline, atOutline, lockClosedOutline, keyOutline, shieldCheckmarkOutline, logOutOutline, alertCircleOutline, swapHorizontalOutline, idCardOutline, fingerPrintOutline } from 'ionicons/icons';
 import { AuthStore } from 'src/app/services/auth-store';
+import { Biometrics } from 'src/app/services/biometrics';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterLink]
+  imports: [IonToggle, IonIcon, IonSpinner, IonText, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterLink]
 })
 export class ProfilePage implements ViewWillEnter {
   authStore = inject(AuthStore);
   private router = inject(Router);
   private toastController = inject(ToastController);
   private alertController = inject(AlertController);
+  private biometrics = inject(Biometrics);
 
   currentPassword = '';
   newPassword = '';
   confirmPassword = '';
   changing = signal(false);
+  biometricsAvailable = signal(false);
+  biometricEnabled = signal(true);
 
   constructor() {
-    addIcons({personOutline,atOutline,swapHorizontalOutline,idCardOutline,lockClosedOutline,keyOutline,alertCircleOutline,shieldCheckmarkOutline,logOutOutline});
+    addIcons({personOutline,atOutline,idCardOutline,swapHorizontalOutline,lockClosedOutline,keyOutline,alertCircleOutline,fingerPrintOutline,shieldCheckmarkOutline,logOutOutline});
   }
 
-  private async showToast(message: string)
+  private async showToast(message: string, css: 'app-toast-error' | 'app-toast-successs')
   {
     const toast = await this.toastController.create({
       message,
       duration: 2000,
       position: 'bottom',
-      cssClass: 'app-toast-success',
+      cssClass: css,
     });
     await toast.present();
   }
@@ -45,6 +49,8 @@ export class ProfilePage implements ViewWillEnter {
   {
     this.authStore.authError.set('');
     this.authStore.ensureRolesLoaded();
+    this.biometrics.isAvailable().then(available => this.biometricsAvailable.set(available));
+    this.biometrics.isEnabled().then(enabled => this.biometricEnabled.set(enabled));
   }
 
   onChangePassword()
@@ -75,7 +81,7 @@ export class ProfilePage implements ViewWillEnter {
     this.authStore.changePassword(this.currentPassword, this.newPassword).subscribe({
       next:() => 
       {
-        this.showToast('Password changed successfully');
+        this.showToast('Password changed successfully', 'app-toast-successs');
         this.currentPassword = '';
         this.newPassword = '';
         this.confirmPassword = '';
@@ -87,6 +93,37 @@ export class ProfilePage implements ViewWillEnter {
         this.changing.set(false);
       }
     })
+  }
+
+  async onBiometricToggle(event: CustomEvent)
+  {
+    const wantOn = event.detail.checked;
+
+    if (!wantOn)
+    {
+      await this.biometrics.setEnabled(false);
+      this.biometricEnabled.set(false);
+      return;
+    }
+
+    try
+    {
+      await this.biometrics.authenticate();
+      await this.biometrics.setEnabled(true);
+      this.biometricEnabled.set(true);
+    }
+    catch
+    {
+      this.resyncBiometricToggle();
+      this.showToast('Biometric verification failed', 'app-toast-error');
+    }
+  }
+
+  private resyncBiometricToggle()
+  {
+    const truth = this.biometricEnabled();
+    this.biometricEnabled.set(!truth);
+    setTimeout(() => this.biometricEnabled.set(truth), 0);
   }
 
   async onLogout()

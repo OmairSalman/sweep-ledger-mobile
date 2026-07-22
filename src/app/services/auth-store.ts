@@ -178,6 +178,7 @@ export class AuthStore {
           if (err?.status === 403 || err?.status === 404)
           {
             this.activeRole.set(null);
+            this.permissions.set([]);
             return this.discoverAndSelectRole(deviceId);
           }
           return throwError(() => err);
@@ -217,7 +218,7 @@ export class AuthStore {
         this.permissions.set(response.permissions);
         this.push.registerPush();
       }),
-      map(() => 'established' as const)
+      map(() => 'established')
     )
   }
 
@@ -226,6 +227,21 @@ export class AuthStore {
     return from(Device.getId()).pipe(
       switchMap((deviceId) => this.applyRole(role, deviceId.identifier))
     );
+  }
+
+  reestablishSession(): Observable<EstablishmentResult>
+  {
+    return from(Device.getId()).pipe(
+      switchMap((deviceId) => this.establishRoleSession(deviceId.identifier))
+    );
+  }
+
+  refreshActivePermissions(): Observable<void>
+  {
+    return this.api.get<PagePermissions[]>(`/auth/role/${this.activeRole()!.id}/permissions`).pipe(
+      tap((permissions) => this.permissions.set(permissions)),
+      map(() => {})
+    )
   }
 
   can(pageKey: string, operation: 'read' | 'write' | 'update' | 'delete' | 'print'): boolean

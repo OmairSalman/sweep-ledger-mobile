@@ -11,7 +11,10 @@ import { refreshInterceptor } from './app/interceptors/refresh-interceptor';
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    // Focus manager: moves focus to the incoming page on navigation, so the
+    // outgoing page is never aria-hidden while still holding focus (Chrome's
+    // "Blocked aria-hidden" warning on routerLink items).
+    provideIonicAngular({ focusManagerPriority: ['content'] }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(
       withInterceptors([authTokenInterceptor, refreshInterceptor])

@@ -14,8 +14,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- Structural room reserved: a future rename card slots in here,
-       above the matrix, as a .pau-card. -->
   @if (loading()) {
     <div class="center-state"><ion-spinner name="circular"></ion-spinner></div>
   }
@@ -24,7 +22,55 @@
       <ion-text color="danger"><p>{{ errorMsg() }}</p></ion-text>
     </div>
   }
-  @else {
+  @else
+  {
+    <!-- Role identity card — occupies the header slot reserved in the
+         first matrix pass. -->
+    <div class="pau-card role-header-card">
+      @if (!editingName())
+      {
+        <div class="role-header-row">
+          <div class="pau-tile" aria-hidden="true">
+            <ion-icon name="id-card-outline"></ion-icon>
+          </div>
+          <h1 class="role-name">{{ role()?.name }}</h1>
+          <div class="role-actions">
+            <ion-button fill="clear" (click)="startRename()" aria-label="Rename role">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" color="danger" (click)="confirmDelete()" aria-label="Delete role">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      }
+      @else
+      {
+        <div class="role-header-row">
+          <ion-input
+            #nameInput
+            class="role-name-input"
+            [value]="nameDraft()"
+            (ionInput)="nameDraft.set($event.detail.value ?? '')"
+            (keyup.enter)="saveRename()"
+            aria-label="Role name"
+          ></ion-input>
+          <div class="role-actions">
+            <ion-button fill="clear" color="success"
+                        (click)="saveRename()"
+                        [disabled]="!nameDraft().trim() || savingName()"
+                        aria-label="Save name">
+              @if (savingName()) { <ion-spinner name="circular"></ion-spinner> }
+              @else { <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon> }
+            </ion-button>
+            <ion-button fill="clear" (click)="cancelRename()" [disabled]="savingName()" aria-label="Cancel rename">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      }
+    </div>
+
     @if (matrix().length === 0) {
       <div class="center-state">
         <p>This role has no pages yet. Add one to grant access.</p>

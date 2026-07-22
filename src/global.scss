@@ -140,7 +140,12 @@ ion-toggle {
   box-shadow: var(--pau-shadow-xs);
 }
 
-.entity-row ion-item {
+/* The row works in both shapes: ion-item nested in an ion-item-sliding
+   carrying the class (swipeable lists), or the class directly on the
+   ion-item (plain lists) — the second selector keeps the height and
+   padding when there is no sliding wrapper. */
+.entity-row ion-item,
+ion-item.entity-row {
   --background: var(--ion-item-background);
   --border-width: 0;
   --min-height: 64px;

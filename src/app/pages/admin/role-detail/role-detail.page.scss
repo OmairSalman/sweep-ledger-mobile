@@ -105,3 +105,85 @@ ion-list {
     margin-inline-end: var(--pau-space-2);
   }
 }
+
+/* ---- Role identity card: name + rename/delete ---- */
+.role-header-card {
+  max-inline-size: 480px;
+  margin-inline: auto;
+  margin-block-end: var(--pau-card-gap);
+  padding-block: var(--pau-space-3);
+}
+
+.role-header-row {
+  display: flex;
+  align-items: center;
+  gap: var(--pau-space-3);
+}
+
+.role-header-row .pau-tile {
+  inline-size: 44px;
+  block-size: 44px;
+}
+
+.role-name {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: var(--pau-text-xl);
+  font-weight: var(--pau-weight-bold);
+  line-height: var(--pau-leading-tight);
+  word-break: break-word;
+}
+
+.role-actions {
+  display: flex;
+  flex: none;
+  gap: var(--pau-space-1);
+  margin-inline-end: calc(var(--pau-space-2) * -1);
+
+  ion-button {
+    margin: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    inline-size: 44px;
+    block-size: 44px;
+  }
+
+  ion-icon {
+    font-size: 22px;
+  }
+
+  ion-spinner {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+}
+
+/* Uncoloured actions (rename, cancel) default to maroon, which fails as a
+   bare glyph on the dark card (1.81:1) — full ink there. Save keeps success,
+   delete keeps danger; both clear 3:1 as icons in either palette. */
+@media (prefers-color-scheme: dark) {
+  .role-actions ion-button:not([color]) {
+    --color: var(--pau-ink);
+  }
+}
+
+/* In-card field, per the .pau-field inversion rule: gray fill on the white
+   card. All three highlight states set so ngModel-style validity can't paint
+   it green. */
+.role-name-input {
+  flex: 1;
+  min-inline-size: 0;
+  --background: var(--pau-bg);
+  --color: var(--pau-ink);
+  --padding-start: var(--pau-space-4);
+  --padding-end: var(--pau-space-4);
+  --highlight-color-focused: var(--ion-color-primary);
+  --highlight-color-valid: var(--ion-color-primary);
+  --highlight-color-invalid: var(--ion-color-danger);
+  min-block-size: 44px;
+  border-radius: var(--pau-radius-md);
+  overflow: hidden;
+  font-size: var(--pau-text-md);
+  font-weight: var(--pau-weight-semibold);
+}

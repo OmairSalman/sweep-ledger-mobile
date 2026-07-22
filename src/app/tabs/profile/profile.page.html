@@ -111,6 +111,24 @@
       </div>
     </div>
 
+    <!-- Device settings -->
+    @if (biometricsAvailable())
+    {
+      <div class="pau-card">
+        <div class="pau-kv">
+          <span class="pau-kv__k">
+            <ion-icon name="finger-print-outline" aria-hidden="true"></ion-icon>
+            Biometric login
+          </span>
+          <ion-toggle
+            [checked]="biometricEnabled()"
+            (ionChange)="onBiometricToggle($event)"
+            aria-label="Biometric login"
+          ></ion-toggle>
+        </div>
+      </div>
+    }
+
     <!-- Account actions -->
     <div class="profile-actions">
       @if (authStore.can('admin','read'))
